@@ -1,0 +1,101 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.MovieExplorer" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary Colors -->
+        <item name="colorPrimary">@color/cinema_blue</item>
+        <item name="colorOnPrimary">@color/text_on_primary</item>
+        <item name="colorPrimaryContainer">@color/cinema_blue_subtle</item>
+        <item name="colorOnPrimaryContainer">@color/cinema_blue_dark</item>
+
+        <!-- Secondary Colors -->
+        <item name="colorSecondary">@color/golden_accent</item>
+        <item name="colorOnSecondary">@color/text_primary</item>
+        <item name="colorSecondaryContainer">@color/golden_light</item>
+        <item name="colorOnSecondaryContainer">@color/golden_dark</item>
+
+        <!-- Tertiary Colors -->
+        <item name="colorTertiary">@color/movie_red</item>
+        <item name="colorOnTertiary">@color/text_on_dark</item>
+        <item name="colorTertiaryContainer">@color/movie_red_dark</item>
+        <item name="colorOnTertiaryContainer">@color/text_on_dark</item>
+
+        <!-- Background Colors -->
+        <item name="android:colorBackground">@color/background_primary</item>
+        <item name="colorOnBackground">@color/text_primary</item>
+        <item name="colorSurface">@color/surface_light</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorSurfaceVariant">@color/surface_elevated</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+
+        <!-- Error Colors -->
+        <item name="colorError">@color/error_red</item>
+        <item name="colorOnError">@color/text_on_dark</item>
+        <item name="colorErrorContainer">@color/error_red</item>
+        <item name="colorOnErrorContainer">@color/text_on_dark</item>
+
+        <!-- Status Bar & Navigation -->
+        <item name="android:statusBarColor">@color/cinema_blue</item>
+        <item name="android:navigationBarColor">@color/background_primary</item>
+        <item name="android:windowLightStatusBar">false</item>
+
+        <!-- Additional Customizations -->
+        <item name="android:windowBackground">@color/background_primary</item>
+        <item name="colorControlNormal">@color/text_secondary</item>
+        <item name="colorControlActivated">@color/cinema_blue</item>
+        <item name="colorControlHighlight">@color/blue_overlay</item>
+    </style>
+
+    <!-- Movie Card Style -->
+    <style name="MovieCardStyle">
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:background">@color/background_card</item>
+        <item name="android:elevation">4dp</item>
+        <item name="cornerRadius">12dp</item>
+    </style>
+
+    <!-- Movie Title Style -->
+    <style name="MovieTitleStyle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <!-- Movie Rating Style -->
+    <style name="MovieRatingStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/golden_accent</item>
+        <item name="android:drawablePadding">4dp</item>
+    </style>
+
+    <!-- Movie Genre Style -->
+    <style name="MovieGenreStyle">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:background">@color/cinema_blue_subtle</item>
+        <item name="android:padding">6dp</item>
+        <item name="cornerRadius">16dp</item>
+    </style>
+
+    <!-- Button Styles -->
+    <style name="PrimaryButtonStyle" parent="Widget.Material3.Button">
+        <item name="android:backgroundTint">@color/cinema_blue</item>
+        <item name="android:textColor">@color/text_on_primary</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="SecondaryButtonStyle" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="strokeColor">@color/cinema_blue</item>
+        <item name="android:textColor">@color/cinema_blue</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
+
+    <!-- Floating Action Button -->
+    <style name="MovieFabStyle" parent="Widget.Material3.FloatingActionButton.Primary">
+        <item name="backgroundTint">@color/movie_red</item>
+        <item name="tint">@color/text_on_dark</item>
+    </style>
+</resources>
