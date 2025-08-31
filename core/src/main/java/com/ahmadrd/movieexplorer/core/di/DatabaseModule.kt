@@ -23,6 +23,7 @@ class DatabaseModule {
             MoviesDatabase::class.java, "movies.db"
         ).fallbackToDestructiveMigration(true).build()
 
+    @Singleton
     @Provides
     fun providePopularMoviesDao(database: MoviesDatabase): PopularMoviesDao =
         database.popularMoviesDao()
