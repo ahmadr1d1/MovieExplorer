@@ -51,6 +51,7 @@ android {
     }
     buildFeatures {
         buildConfig = true
+        viewBinding = true
     }
 }
 
@@ -76,8 +77,9 @@ dependencies {
     api(libs.androidx.room.ktx)
 
     // DI
-    api(libs.hilt.android)
+    implementation(libs.hilt.android)
     ksp(libs.room.compiler)
+    ksp(libs.hilt.android.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

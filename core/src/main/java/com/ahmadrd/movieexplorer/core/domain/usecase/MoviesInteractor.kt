@@ -2,7 +2,7 @@ package com.ahmadrd.movieexplorer.core.domain.usecase
 
 import com.ahmadrd.movieexplorer.core.domain.model.PopularMovies
 import com.ahmadrd.movieexplorer.core.domain.repository.IMoviesRepository
-import jakarta.inject.Inject
+import javax.inject.Inject
 
 class MoviesInteractor @Inject constructor(private val moviesRepository: IMoviesRepository) :
     MoviesUseCase {
