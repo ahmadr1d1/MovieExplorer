@@ -49,4 +49,11 @@
     <color name="black_overlay_medium">#4D000000</color>  <!-- 30% black -->
     <color name="black_overlay_heavy">#80000000</color>   <!-- 50% black -->
     <color name="blue_overlay">#1A1565C0</color>          <!-- 10% blue -->
+
+    <color name="accent_color">#ff6b6b</color>
+    <color name="gradient_text">#ff6b6b</color>
+    <color name="subtitle_text">#a0a0a0</color>
+    <color name="hint_text">#a0a0a0</color>
+    <color name="search_background">#1affffff</color>
+    <color name="search_stroke">#33ffffff</color>
 </resources>

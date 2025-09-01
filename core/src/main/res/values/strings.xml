@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="popular_movies_image">popular movies image</string>
+    <string name="popular_movies_title">popular movies title</string>
+    <string name="popular_movies_release_date">popular movies year</string>
+    <string name="name_movie">Movie Name</string>
+</resources>

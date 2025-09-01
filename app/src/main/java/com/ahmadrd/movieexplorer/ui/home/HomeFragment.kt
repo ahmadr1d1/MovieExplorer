@@ -4,39 +4,67 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import com.ahmadrd.movieexplorer.R
+import com.ahmadrd.movieexplorer.core.data.Resource
+import com.ahmadrd.movieexplorer.core.ui.ListPopularMoviesAdapter
 import com.ahmadrd.movieexplorer.databinding.FragmentHomeBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
+
+    private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+        return binding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if (activity != null) {
+
+            val popularMoviesAdapter = ListPopularMoviesAdapter()
+//            tourismAdapter.onItemClick = { selectedData ->
+//                val intent = Intent(activity, DetailTourismActivity::class.java)
+//                intent.putExtra(DetailTourismActivity.EXTRA_DATA, selectedData)
+//                startActivity(intent)
+//            }
+
+            homeViewModel.popularMovies.observe(viewLifecycleOwner) { popularMovies ->
+                if (popularMovies != null) {
+                    when (popularMovies) {
+                        is Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
+                        is Resource.Success -> {
+                            binding.progressBar.visibility = View.GONE
+                            popularMoviesAdapter.submitList(popularMovies.data)
+                        }
+                        is Resource.Error -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.viewError.root.visibility = View.VISIBLE
+                            binding.viewError.tvErrorMessage.text =
+                                popularMovies.message ?: getString(R.string.something_wrong)
+                        }
+                    }
+                }
+            }
+
+            with(binding.rvPopularMovies) {
+                layoutManager = GridLayoutManager(context, 2)
+//                setHasFixedSize(true)
+                adapter = popularMoviesAdapter
+            }
+        }
     }
 }

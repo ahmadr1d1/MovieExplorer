@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Blues - Deep Cinema Blue -->
+    <color name="cinema_blue">#FF42A5F5</color>           <!-- Main blue lebih terang agar kontras -->
+    <color name="cinema_blue_dark">#FF1565C0</color>      <!-- Darker blue -->
+    <color name="cinema_blue_light">#FF90CAF9</color>     <!-- Light blue untuk night -->
+    <color name="cinema_blue_subtle">#FF1E293B</color>    <!-- Subtle blue sebagai latar lembut -->
+
+    <!-- Secondary Colors - Golden Accent -->
+    <color name="golden_accent">#FFFFC107</color>         <!-- Gold tetap -->
+    <color name="golden_dark">#FFFFB300</color>           <!-- Gold lebih pekat -->
+    <color name="golden_light">#FFFFD54F</color>          <!-- Gold lebih lembut -->
+
+    <!-- Netflix-inspired Red for favorites -->
+    <color name="movie_red">#FFE50914</color>             <!-- Netflix red tetap -->
+    <color name="movie_red_dark">#FFEF5350</color>        <!-- Versi night lebih terang agar kontras -->
+
+    <!-- Background Colors -->
+    <color name="background_primary">#FF0A1929</color>    <!-- Dark background utama -->
+    <color name="background_secondary">#FF111827</color>  <!-- Slightly lighter dark -->
+    <color name="background_dark">#FF000000</color>       <!-- Black background -->
+    <color name="background_card">#FF1E293B</color>       <!-- Card gelap -->
+    <color name="background_card_dark">#FF334155</color>  <!-- Darker card -->
+
+    <!-- Text Colors -->
+    <color name="text_primary">#FFFFFFFF</color>          <!-- Putih -->
+    <color name="text_secondary">#FFCBD5E0</color>        <!-- Abu-abu terang -->
+    <color name="text_hint">#FF94A3B8</color>             <!-- Abu-abu redup -->
+    <color name="text_on_dark">#FFFFFFFF</color>          <!-- Tetap putih -->
+    <color name="text_on_primary">#FFFFFFFF</color>       <!-- Tetap putih -->
+
+    <!-- Surface Colors -->
+    <color name="surface_light">#FF1E293B</color>         <!-- Light surface gelap -->
+    <color name="surface_dark">#FF0F172A</color>          <!-- Dark surface -->
+    <color name="surface_elevated">#FF334155</color>      <!-- Elevated surface -->
+
+    <!-- Border & Divider -->
+    <color name="border_light">#FF475569</color>          <!-- Border abu gelap -->
+    <color name="border_dark">#FF64748B</color>           <!-- Border abu terang -->
+    <color name="divider">#FF475569</color>               <!-- Divider -->
+
+    <!-- Status Colors -->
+    <color name="success_green">#FF34D399</color>         <!-- Hijau terang -->
+    <color name="warning_orange">#FFFBBF24</color>        <!-- Orange terang -->
+    <color name="error_red">#FFF87171</color>             <!-- Merah terang -->
+
+    <!-- Transparent Colors -->
+    <color name="black_overlay_light">#33FFFFFF</color>   <!-- 20% white overlay -->
+    <color name="black_overlay_medium">#66FFFFFF</color>  <!-- 40% white overlay -->
+    <color name="black_overlay_heavy">#99FFFFFF</color>   <!-- 60% white overlay -->
+    <color name="blue_overlay">#332196F3</color>          <!-- Blue overlay -->
+
+    <color name="accent_color">#ff6b6b</color>
+    <color name="gradient_text">#ff6b6b</color>
+    <color name="subtitle_text">#a0a0a0</color>
+    <color name="hint_text">#FF94A3B8</color>
+    <color name="search_background">#33000000</color>
+    <color name="search_stroke">#4DFFFFFF</color>
+</resources>
