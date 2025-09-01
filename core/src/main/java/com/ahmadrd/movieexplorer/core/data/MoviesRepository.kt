@@ -4,7 +4,9 @@ import com.ahmadrd.movieexplorer.core.data.source.local.LocalDataSource
 import com.ahmadrd.movieexplorer.core.data.source.remote.RemoteDataSource
 import com.ahmadrd.movieexplorer.core.data.source.remote.network.ApiResponse
 import com.ahmadrd.movieexplorer.core.data.source.remote.response.ResultsItem
+import com.ahmadrd.movieexplorer.core.data.source.remote.response.ResultsTrendingMovies
 import com.ahmadrd.movieexplorer.core.domain.model.PopularMovies
+import com.ahmadrd.movieexplorer.core.domain.model.TrendingMovies
 import com.ahmadrd.movieexplorer.core.domain.repository.IMoviesRepository
 import com.ahmadrd.movieexplorer.core.utils.AppExecutors
 import com.ahmadrd.movieexplorer.core.utils.DataMapper
@@ -24,7 +26,7 @@ class MoviesRepository @Inject constructor(
         object : NetworkBoundResource<List<PopularMovies>, List<ResultsItem>>() {
             override fun loadFromDB(): Flow<List<PopularMovies>> {
                 return localDataSource.getPopularMovies().map {
-                    DataMapper.mapEntitiesToDomain(it)
+                    DataMapper.mapPMoviesEntitiesToDomain(it)
                 }
             }
 
@@ -35,22 +37,58 @@ class MoviesRepository @Inject constructor(
                 remoteDataSource.getPopularMovies()
 
             override suspend fun saveCallResult(data: List<ResultsItem>) {
-                val popularMoviesList = DataMapper.mapResponsesToEntities(data)
+                val popularMoviesList = DataMapper.mapPMoviesResponsesToEntities(data)
                 localDataSource.insertPopularMovies(popularMoviesList)
             }
         }.asFlow()
 
     override fun getFavoritePopularMovies(): Flow<List<PopularMovies>> {
         return localDataSource.getFavoritePopularMovies().map {
-            DataMapper.mapEntitiesToDomain(it)
+            DataMapper.mapPMoviesEntitiesToDomain(it)
         }
     }
 
     override fun setFavoriteMovies(popularMovies: PopularMovies, state: Boolean) {
-        val moviesEntity = DataMapper.mapDomainToEntity(popularMovies)
+        val moviesEntity = DataMapper.mapPMoviesDomainToEntity(popularMovies)
         appExecutors.diskIO()
-            .execute { localDataSource.updateFavoritePopularMovies(
-                moviesEntity, state)
+            .execute {
+                localDataSource.updateFavoritePopularMovies(
+                    moviesEntity, state
+                )
             }
     }
+
+    override fun getTrendingMovies(): Flow<Resource<List<TrendingMovies>>> =
+        object : NetworkBoundResource<List<TrendingMovies>, List<ResultsTrendingMovies>>() {
+            override fun loadFromDB(): Flow<List<TrendingMovies>> {
+                return localDataSource.getTrendingMovies().map {
+                    DataMapper.mapTMoviesEntitiesToDomain(it)
+                }
+            }
+
+            override fun shouldFetch(data: List<TrendingMovies>?): Boolean =
+                true
+
+            override suspend fun createCall(): Flow<ApiResponse<List<ResultsTrendingMovies>>> =
+                remoteDataSource.getTrendingMovies()
+
+            override suspend fun saveCallResult(data: List<ResultsTrendingMovies>) {
+                val trendingMoviesList = DataMapper.mapTrendingMoviesResponsesToEntities(data)
+                localDataSource.insertTrendingMovies(trendingMoviesList)
+            }
+        }.asFlow()
+
+    override fun getFavoriteTrendingMovies(): Flow<List<TrendingMovies>> =
+        localDataSource.getFavoriteTrendingMovies().map {
+            DataMapper.mapTMoviesEntitiesToDomain(it)
+        }
+
+    override fun setFavoriteTrendingMovies(trendingMovies: TrendingMovies, state: Boolean) =
+        appExecutors.diskIO()
+            .execute {
+                localDataSource.updateFavoriteTrendingMovies(
+                    DataMapper.
+                    mapTMoviesDomainToEntity(trendingMovies), state
+                )
+            }
 }

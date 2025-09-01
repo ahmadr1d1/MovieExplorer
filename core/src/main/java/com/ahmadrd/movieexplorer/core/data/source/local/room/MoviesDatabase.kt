@@ -12,4 +12,6 @@ abstract class MoviesDatabase : RoomDatabase() {
 
     abstract fun popularMoviesDao(): PopularMoviesDao
 
+    abstract fun trendingMoviesDao(): TrendingMoviesDao
+
 }

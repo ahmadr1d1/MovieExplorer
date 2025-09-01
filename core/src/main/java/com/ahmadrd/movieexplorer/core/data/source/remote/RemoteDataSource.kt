@@ -4,6 +4,7 @@ import android.util.Log
 import com.ahmadrd.movieexplorer.core.data.source.remote.network.ApiResponse
 import com.ahmadrd.movieexplorer.core.data.source.remote.network.ApiService
 import com.ahmadrd.movieexplorer.core.data.source.remote.response.ResultsItem
+import com.ahmadrd.movieexplorer.core.data.source.remote.response.ResultsTrendingMovies
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -30,5 +31,22 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
                 Log.e("RemoteDataSource", e.toString())
             }
         }.flowOn(Dispatchers.IO)
+    }
+
+    fun getTrendingMovies(): Flow<ApiResponse<List<ResultsTrendingMovies>>> {
+        return flow {
+            try {
+                val response = apiService.getTrendingMovies()
+                val dataArray = response.resultsTrendingMovies
+                if (dataArray.isNotEmpty()) {
+                    emit(ApiResponse.Success(response.resultsTrendingMovies))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(e.toString()))
+                Log.e("RemoteDataSource", e.toString())
+            }
+        }
     }
 }

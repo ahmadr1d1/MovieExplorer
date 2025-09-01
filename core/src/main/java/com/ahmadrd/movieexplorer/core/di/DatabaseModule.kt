@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.ahmadrd.movieexplorer.core.data.source.local.room.MoviesDatabase
 import com.ahmadrd.movieexplorer.core.data.source.local.room.PopularMoviesDao
+import com.ahmadrd.movieexplorer.core.data.source.local.room.TrendingMoviesDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,4 +28,10 @@ class DatabaseModule {
     @Provides
     fun providePopularMoviesDao(database: MoviesDatabase): PopularMoviesDao =
         database.popularMoviesDao()
+
+    @Singleton
+    @Provides
+    fun provideTrendingMoviesDao(database: MoviesDatabase): TrendingMoviesDao =
+        database.trendingMoviesDao()
+
 }
