@@ -40,26 +40,33 @@ object DataMapper {
         return popularMoviesList
     }
 
-    fun mapPMoviesEntitiesToDomain(input: List<PopularMoviesEntity>): List<PopularMovies> =
-        input.map {
+    fun mapPMoviesEntitiesToDomain(
+        input: List<PopularMoviesEntity>,
+        allGenresDomain: List<GenresMovie>
+    ): List<PopularMovies> {
+        val genreMap = allGenresDomain.associateBy({ it.id }, { it.name })
+        return input.map { entity ->
+            val genreNames = entity.genreIds.mapNotNull { id -> genreMap[id] }
             PopularMovies(
-                overview = it.overview,
-                originalLanguage = it.originalLanguage,
-                originalTitle = it.originalTitle,
-                video = it.video,
-                title = it.title,
-                genreIds = it.genreIds,
-                posterPath = it.posterPath,
-                backdropPath = it.backdropPath,
-                releaseDate = it.releaseDate,
-                popularity = it.popularity,
-                voteAverage = it.voteAverage,
-                id = it.id,
-                adult = it.adult,
-                voteCount = it.voteCount,
-                isFavorite = it.isFavorite
+                id = entity.id,
+                title = entity.title,
+                overview = entity.overview,
+                originalLanguage = entity.originalLanguage,
+                originalTitle = entity.originalTitle,
+                video = entity.video,
+                genreIds = entity.genreIds, // Tetap simpan List<Int> jika masih dibutuhkan
+                genreNames = genreNames,    // List<String> yang sudah di-map
+                posterPath = entity.posterPath,
+                backdropPath = entity.backdropPath,
+                releaseDate = entity.releaseDate,
+                popularity = entity.popularity,
+                voteAverage = entity.voteAverage,
+                adult = entity.adult,
+                voteCount = entity.voteCount,
+                isFavorite = entity.isFavorite
             )
         }
+    }
 
     fun mapPMoviesDomainToEntity(input: PopularMovies) =
         PopularMoviesEntity(
@@ -110,27 +117,34 @@ object DataMapper {
     }
 
 
-    fun mapTMoviesEntitiesToDomain(input: List<TrendingMoviesEntity>): List<TrendingMovies> =
-        input.map {
+    fun mapTMoviesEntitiesToDomain(
+        input: List<TrendingMoviesEntity>,
+        allGenresDomain: List<GenresMovie> // Daftar semua genre (ID + Nama)
+    ): List<TrendingMovies> {
+        val genreMap = allGenresDomain.associateBy({ it.id }, { it.name })
+        return input.map { entity ->
+            val genreNames = entity.genreIds.mapNotNull { id -> genreMap[id] }
             TrendingMovies(
-                overview = it.overview,
-                originalLanguage = it.originalLanguage,
-                originalTitle = it.originalTitle,
-                video = it.video,
-                title = it.title,
-                genreIds = it.genreIds,
-                posterPath = it.posterPath,
-                backdropPath = it.backdropPath,
-                mediaType = it.mediaType,
-                releaseDate = it.releaseDate,
-                popularity = it.popularity,
-                voteAverage = it.voteAverage,
-                id = it.id,
-                adult = it.adult,
-                voteCount = it.voteCount,
-                isFavorite = it.isFavorite
+                id = entity.id,
+                title = entity.title,
+                overview = entity.overview,
+                originalLanguage = entity.originalLanguage,
+                originalTitle = entity.originalTitle,
+                video = entity.video,
+                genreIds = entity.genreIds, // Tetap simpan List<Int>
+                genreNames = genreNames,    // List<String> yang sudah di-map
+                posterPath = entity.posterPath,
+                backdropPath = entity.backdropPath,
+                mediaType = entity.mediaType,
+                releaseDate = entity.releaseDate,
+                popularity = entity.popularity,
+                voteAverage = entity.voteAverage,
+                adult = entity.adult,
+                voteCount = entity.voteCount,
+                isFavorite = entity.isFavorite
             )
         }
+    }
 
     fun mapTMoviesDomainToEntity(input: TrendingMovies) =
         TrendingMoviesEntity(
@@ -155,19 +169,19 @@ object DataMapper {
     fun mapTrendingDomainToPopularEntity(input: TrendingMovies): PopularMoviesEntity =
         PopularMoviesEntity(
             id = input.id,
-            title = input.title ?: "N/A", // handle null title from trending
-            overview = input.overview ?: "",
-            originalLanguage = input.originalLanguage ?: "",
-            originalTitle = input.originalTitle ?: "",
-            video = input.video ?: false,
-            genreIds = input.genreIds ?: emptyList(),
+            title = input.title,
+            overview = input.overview,
+            originalLanguage = input.originalLanguage,
+            originalTitle = input.originalTitle,
+            video = input.video,
+            genreIds = input.genreIds, // Ambil dari TrendingMovies Domain
             posterPath = input.posterPath ?: "",
             backdropPath = input.backdropPath ?: "",
             releaseDate = input.releaseDate ?: "N/A",
-            popularity = input.popularity ?: 0.0,
-            voteAverage = input.voteAverage ?: 0.0,
-            adult = input.adult ?: false,
-            voteCount = input.voteCount ?: 0,
+            popularity = input.popularity,
+            voteAverage = input.voteAverage,
+            adult = input.adult,
+            voteCount = input.voteCount,
             isFavorite = input.isFavorite
         )
 

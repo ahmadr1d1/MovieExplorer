@@ -19,5 +19,6 @@ data class PopularMovies (
     val voteAverage: Double,
     val adult: Boolean,
     val voteCount: Int,
+    val genreNames: List<String>,
     var isFavorite: Boolean
 ): Parcelable

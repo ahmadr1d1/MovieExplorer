@@ -35,5 +35,7 @@ data class TrendingMovies(
 
     val voteCount: Int,
 
+    val genreNames: List<String>,
+
     var isFavorite: Boolean
 ): Parcelable
