@@ -10,6 +10,7 @@ import com.ahmadrd.movieexplorer.core.databinding.ItemTrendingMoviesBinding
 import com.ahmadrd.movieexplorer.core.domain.model.TrendingMovies
 import com.ahmadrd.movieexplorer.core.utils.TMDBImage
 import com.bumptech.glide.Glide
+import kotlin.math.round
 
 class ListTrendingMoviesAdapter :
     ListAdapter<TrendingMovies, ListTrendingMoviesAdapter.ListViewHolder>(DIFF_CALLBACK) {
@@ -39,6 +40,8 @@ class ListTrendingMoviesAdapter :
                 .into(binding.trendingMoviesImage)
             binding.titleTrendingMovies.text = data.title
             binding.releaseDateTrendingMovies.text = data.releaseDate
+            binding.ratingTrendingMovies.text = formatRating(data.voteAverage)
+            binding.genreTrendingMovies.text = data.genreIds.toString()
         }
 
         init {
@@ -46,6 +49,11 @@ class ListTrendingMoviesAdapter :
                 onItemClick?.invoke(getItem(bindingAdapterPosition))
             }
         }
+    }
+
+    private fun formatRating(rating: Double): String {
+        val rounded = round(rating * 10) / 10
+        return rounded.toString()
     }
 
     companion object {

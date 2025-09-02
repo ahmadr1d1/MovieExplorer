@@ -69,7 +69,6 @@ class HomeFragment : Fragment() {
 
             with(binding.rvPopularMovies) {
                 layoutManager = GridLayoutManager(context, 2)
-                setHasFixedSize(true)
                 adapter = popularMoviesAdapter
             }
         }
@@ -85,32 +84,31 @@ class HomeFragment : Fragment() {
 //                startActivity(intent)
 //            }
 
-            homeViewModel.trendingMovies.observe(viewLifecycleOwner) { popularMovies ->
-                if (popularMovies != null) {
-                    when (popularMovies) {
-                        is Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
+            homeViewModel.trendingMovies.observe(viewLifecycleOwner) { trendingMovies ->
+                if (trendingMovies != null) {
+                    when (trendingMovies) {
+                        is Resource.Loading -> showLoading(true)
                         is Resource.Success -> {
-                            binding.progressBar.visibility = View.GONE
-                            trendingMoviesAdapter.submitList(popularMovies.data)
+                            showLoading(false)
+                            trendingMoviesAdapter.submitList(trendingMovies.data)
                         }
 
                         is Resource.Error -> {
-                            binding.progressBar.visibility = View.GONE
+                            showLoading(false)
                             binding.viewError.root.visibility = View.VISIBLE
                             binding.viewError.tvErrorMessage.text =
-                                popularMovies.message ?: getString(R.string.something_wrong)
+                                trendingMovies.message ?: getString(R.string.something_wrong)
                         }
                     }
                 }
             }
 
-            with(binding.rvPopularMovies) {
+            with(binding.rvTrendingMovies) {
                 layoutManager = LinearLayoutManager(
                     context,
                     LinearLayoutManager.HORIZONTAL,
                     false
                 )
-                setHasFixedSize(true)
                 adapter = trendingMoviesAdapter
             }
         }

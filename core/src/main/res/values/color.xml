@@ -3,4 +3,5 @@
     <color name="card">#FFFFFFFF</color>
     <color name="text_primary">#FF1A202C</color>
     <color name="background_card">#FFFFFFFF</color>
+    <color name="star">#E9FF00</color>
 </resources>

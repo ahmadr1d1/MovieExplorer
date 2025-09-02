@@ -182,6 +182,7 @@
                     android:nestedScrollingEnabled="false"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:spanCount="2"
+                    android:paddingBottom="62dp"
                     tools:listitem="@layout/item_popular_movies" />
 
             </LinearLayout>
