@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.ahmadrd.movieexplorer.R
 import com.ahmadrd.movieexplorer.core.data.Resource
 import com.ahmadrd.movieexplorer.core.ui.ListPopularMoviesAdapter
+import com.ahmadrd.movieexplorer.core.ui.ListTrendingMoviesAdapter
 import com.ahmadrd.movieexplorer.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,11 +34,15 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observePopularMovies()
+        observeTrendingMovies()
+    }
 
+    private fun observePopularMovies() {
         if (activity != null) {
 
             val popularMoviesAdapter = ListPopularMoviesAdapter()
-//            tourismAdapter.onItemClick = { selectedData ->
+//            popularMoviesAdapter.onItemClick = { selectedData ->
 //                val intent = Intent(activity, DetailTourismActivity::class.java)
 //                intent.putExtra(DetailTourismActivity.EXTRA_DATA, selectedData)
 //                startActivity(intent)
@@ -45,11 +51,49 @@ class HomeFragment : Fragment() {
             homeViewModel.popularMovies.observe(viewLifecycleOwner) { popularMovies ->
                 if (popularMovies != null) {
                     when (popularMovies) {
+                        is Resource.Loading -> showLoading(true)
+                        is Resource.Success -> {
+                            showLoading(false)
+                            popularMoviesAdapter.submitList(popularMovies.data)
+                        }
+
+                        is Resource.Error -> {
+                            showLoading(false)
+                            binding.viewError.root.visibility = View.VISIBLE
+                            binding.viewError.tvErrorMessage.text =
+                                popularMovies.message ?: getString(R.string.something_wrong)
+                        }
+                    }
+                }
+            }
+
+            with(binding.rvPopularMovies) {
+                layoutManager = GridLayoutManager(context, 2)
+                setHasFixedSize(true)
+                adapter = popularMoviesAdapter
+            }
+        }
+    }
+
+    private fun observeTrendingMovies() {
+        if (activity != null) {
+
+            val trendingMoviesAdapter = ListTrendingMoviesAdapter()
+//            trendingMoviesAdapter.onItemClick = { selectedData ->
+//                val intent = Intent(activity, DetailTourismActivity::class.java)
+//                intent.putExtra(DetailTourismActivity.EXTRA_DATA, selectedData)
+//                startActivity(intent)
+//            }
+
+            homeViewModel.trendingMovies.observe(viewLifecycleOwner) { popularMovies ->
+                if (popularMovies != null) {
+                    when (popularMovies) {
                         is Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
                         is Resource.Success -> {
                             binding.progressBar.visibility = View.GONE
-                            popularMoviesAdapter.submitList(popularMovies.data)
+                            trendingMoviesAdapter.submitList(popularMovies.data)
                         }
+
                         is Resource.Error -> {
                             binding.progressBar.visibility = View.GONE
                             binding.viewError.root.visibility = View.VISIBLE
@@ -61,10 +105,20 @@ class HomeFragment : Fragment() {
             }
 
             with(binding.rvPopularMovies) {
-                layoutManager = GridLayoutManager(context, 2)
-//                setHasFixedSize(true)
-                adapter = popularMoviesAdapter
+                layoutManager = LinearLayoutManager(
+                    context,
+                    LinearLayoutManager.HORIZONTAL,
+                    false
+                )
+                setHasFixedSize(true)
+                adapter = trendingMoviesAdapter
             }
         }
     }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+
+    }
+
 }
