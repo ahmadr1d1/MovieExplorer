@@ -1,9 +1,12 @@
 package com.ahmadrd.movieexplorer.core.utils
 
+import com.ahmadrd.movieexplorer.core.data.source.local.entity.GenresMovieEntity
 import com.ahmadrd.movieexplorer.core.data.source.local.entity.PopularMoviesEntity
 import com.ahmadrd.movieexplorer.core.data.source.local.entity.TrendingMoviesEntity
+import com.ahmadrd.movieexplorer.core.data.source.remote.response.GenresItem
 import com.ahmadrd.movieexplorer.core.data.source.remote.response.ResultsItem
 import com.ahmadrd.movieexplorer.core.data.source.remote.response.ResultsTrendingMovies
+import com.ahmadrd.movieexplorer.core.domain.model.GenresMovie
 import com.ahmadrd.movieexplorer.core.domain.model.PopularMovies
 import com.ahmadrd.movieexplorer.core.domain.model.TrendingMovies
 
@@ -54,7 +57,7 @@ object DataMapper {
                 id = it.id,
                 adult = it.adult,
                 voteCount = it.voteCount,
-                isFavorite = false
+                isFavorite = it.isFavorite
             )
         }
 
@@ -74,8 +77,7 @@ object DataMapper {
             id = input.id,
             adult = input.adult,
             voteCount = input.voteCount,
-            isFavorite = false
-
+            isFavorite = input.isFavorite
         )
 
 
@@ -125,7 +127,8 @@ object DataMapper {
                 voteAverage = it.voteAverage,
                 id = it.id,
                 adult = it.adult,
-                voteCount = it.voteCount
+                voteCount = it.voteCount,
+                isFavorite = it.isFavorite
             )
         }
 
@@ -147,4 +150,43 @@ object DataMapper {
             adult = input.adult,
             voteCount = input.voteCount
         )
+
+    // Mapper dari TrendingMovies (Domain) ke PopularMoviesEntity (untuk disimpan sebagai favorit)
+    fun mapTrendingDomainToPopularEntity(input: TrendingMovies): PopularMoviesEntity =
+        PopularMoviesEntity(
+            id = input.id,
+            title = input.title ?: "N/A", // handle null title from trending
+            overview = input.overview ?: "",
+            originalLanguage = input.originalLanguage ?: "",
+            originalTitle = input.originalTitle ?: "",
+            video = input.video ?: false,
+            genreIds = input.genreIds ?: emptyList(),
+            posterPath = input.posterPath ?: "",
+            backdropPath = input.backdropPath ?: "",
+            releaseDate = input.releaseDate ?: "N/A",
+            popularity = input.popularity ?: 0.0,
+            voteAverage = input.voteAverage ?: 0.0,
+            adult = input.adult ?: false,
+            voteCount = input.voteCount ?: 0,
+            isFavorite = input.isFavorite
+        )
+
+    // --- Genres Movie Mappers ---
+    fun mapGenreResponsesToEntities(input: List<GenresItem>): List<GenresMovieEntity> {
+        return input.map {
+            GenresMovieEntity(
+                id = it.id,
+                name = it.name
+            )
+        }
+    }
+
+    fun mapGenreEntitiesToDomain(input: List<GenresMovieEntity>): List<GenresMovie> {
+        return input.map {
+            GenresMovie(
+                id = it.id,
+                name = it.name
+            )
+        }
+    }
 }

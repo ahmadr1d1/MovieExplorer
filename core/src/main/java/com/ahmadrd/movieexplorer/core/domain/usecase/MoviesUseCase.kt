@@ -1,6 +1,7 @@
 package com.ahmadrd.movieexplorer.core.domain.usecase
 
 import com.ahmadrd.movieexplorer.core.data.Resource
+import com.ahmadrd.movieexplorer.core.domain.model.GenresMovie
 import com.ahmadrd.movieexplorer.core.domain.model.PopularMovies
 import com.ahmadrd.movieexplorer.core.domain.model.TrendingMovies
 import kotlinx.coroutines.flow.Flow
@@ -17,5 +18,7 @@ interface MoviesUseCase {
     fun getFavoriteTrendingMovies(): Flow<List<TrendingMovies>>
     fun setFavoriteTrendingMovies(trendingMovies: TrendingMovies, state: Boolean)
 
+    // Genres Movie
+    fun getGenresMovie(): Flow<Resource<List<GenresMovie>>>
 
 }

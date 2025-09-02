@@ -2,6 +2,7 @@ package com.ahmadrd.movieexplorer.core.di
 
 import android.content.Context
 import androidx.room.Room
+import com.ahmadrd.movieexplorer.core.data.source.local.room.GenresMovieDao
 import com.ahmadrd.movieexplorer.core.data.source.local.room.MoviesDatabase
 import com.ahmadrd.movieexplorer.core.data.source.local.room.PopularMoviesDao
 import com.ahmadrd.movieexplorer.core.data.source.local.room.TrendingMoviesDao
@@ -33,5 +34,10 @@ class DatabaseModule {
     @Provides
     fun provideTrendingMoviesDao(database: MoviesDatabase): TrendingMoviesDao =
         database.trendingMoviesDao()
+
+    @Singleton
+    @Provides
+    fun provideGenresMovieDao(database: MoviesDatabase): GenresMovieDao =
+        database.genresMovieDao()
 
 }

@@ -33,5 +33,7 @@ data class TrendingMovies(
 
     val adult: Boolean,
 
-    val voteCount: Int
+    val voteCount: Int,
+
+    var isFavorite: Boolean
 ): Parcelable

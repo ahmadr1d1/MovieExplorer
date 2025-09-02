@@ -3,8 +3,10 @@ package com.ahmadrd.movieexplorer.core.data
 import com.ahmadrd.movieexplorer.core.data.source.local.LocalDataSource
 import com.ahmadrd.movieexplorer.core.data.source.remote.RemoteDataSource
 import com.ahmadrd.movieexplorer.core.data.source.remote.network.ApiResponse
+import com.ahmadrd.movieexplorer.core.data.source.remote.response.GenresItem
 import com.ahmadrd.movieexplorer.core.data.source.remote.response.ResultsItem
 import com.ahmadrd.movieexplorer.core.data.source.remote.response.ResultsTrendingMovies
+import com.ahmadrd.movieexplorer.core.domain.model.GenresMovie
 import com.ahmadrd.movieexplorer.core.domain.model.PopularMovies
 import com.ahmadrd.movieexplorer.core.domain.model.TrendingMovies
 import com.ahmadrd.movieexplorer.core.domain.repository.IMoviesRepository
@@ -91,4 +93,24 @@ class MoviesRepository @Inject constructor(
                     mapTMoviesDomainToEntity(trendingMovies), state
                 )
             }
+
+    override fun getGenresMovie(): Flow<Resource<List<GenresMovie>>> =
+        object : NetworkBoundResource<List<GenresMovie>, List<GenresItem>>() {
+            override fun loadFromDB(): Flow<List<GenresMovie>> {
+                return localDataSource.getGenresMovie().map {
+                    DataMapper.mapGenreEntitiesToDomain(it)
+                }
+            }
+
+            override fun shouldFetch(data: List<GenresMovie>?): Boolean =
+                data.isNullOrEmpty()
+
+            override suspend fun createCall(): Flow<ApiResponse<List<GenresItem>>> =
+                remoteDataSource.getGenresMovie()
+
+            override suspend fun saveCallResult(data: List<GenresItem>) {
+                val genresList = DataMapper.mapGenreResponsesToEntities(data)
+                localDataSource.insertGenresMovie(genresList)
+            }
+        }.asFlow()
 }

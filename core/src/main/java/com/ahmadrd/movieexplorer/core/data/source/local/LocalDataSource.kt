@@ -1,7 +1,9 @@
 package com.ahmadrd.movieexplorer.core.data.source.local
 
+import com.ahmadrd.movieexplorer.core.data.source.local.entity.GenresMovieEntity
 import com.ahmadrd.movieexplorer.core.data.source.local.entity.PopularMoviesEntity
 import com.ahmadrd.movieexplorer.core.data.source.local.entity.TrendingMoviesEntity
+import com.ahmadrd.movieexplorer.core.data.source.local.room.GenresMovieDao
 import com.ahmadrd.movieexplorer.core.data.source.local.room.PopularMoviesDao
 import com.ahmadrd.movieexplorer.core.data.source.local.room.TrendingMoviesDao
 import kotlinx.coroutines.flow.Flow
@@ -11,12 +13,13 @@ import javax.inject.Singleton
 @Singleton
 class LocalDataSource @Inject constructor(
     private val popularMoviesDao: PopularMoviesDao,
-    private val trendingMoviesDao: TrendingMoviesDao
+    private val trendingMoviesDao: TrendingMoviesDao,
+    private val genresMovieDao: GenresMovieDao
 ) {
 
     // Popular Movies
-    fun getPopularMovies(): Flow<List<PopularMoviesEntity>>
-    = popularMoviesDao.getPopularMovies()
+    fun getPopularMovies(): Flow<List<PopularMoviesEntity>> =
+        popularMoviesDao.getPopularMovies()
 
     fun getFavoritePopularMovies(): Flow<List<PopularMoviesEntity>> =
         popularMoviesDao.getFavoritePopularMovies()
@@ -43,4 +46,11 @@ class LocalDataSource @Inject constructor(
         trendingMovies.isFavorite = newState
         trendingMoviesDao.updateTrendingMovies(trendingMovies)
     }
+
+    // Genres Movie
+    fun getGenresMovie(): Flow<List<GenresMovieEntity>> = genresMovieDao.getGenresMovie()
+
+    suspend fun insertGenresMovie(genres: List<GenresMovieEntity>) =
+        genresMovieDao.insertGenresMovie(genres)
+
 }
