@@ -31,11 +31,8 @@ class ListGenreMoviesAdapter :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: GenresMovie) {
             binding.btnGenresName.text = data.name
-        }
-
-        init {
-            itemView.setOnClickListener {
-                onItemClick?.invoke(getItem(bindingAdapterPosition))
+            binding.btnGenresName.setOnClickListener {
+                onItemClick?.invoke(data)
             }
         }
     }

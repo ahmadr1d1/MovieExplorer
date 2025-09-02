@@ -90,12 +90,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:paddingHorizontal="8dp"
                 android:paddingVertical="4dp"
                 android:text="Action"
                 android:textSize="12sp"
                 android:textColor="@android:color/holo_blue_dark"
-                android:background="@drawable/bg_genre"
                 tools:text="Action" />
         </LinearLayout>
 

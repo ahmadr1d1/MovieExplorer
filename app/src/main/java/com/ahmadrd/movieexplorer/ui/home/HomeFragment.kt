@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -42,6 +43,15 @@ class HomeFragment : Fragment() {
         observePopularMovies()
         observeTrendingMovies()
         observeGenresMovie()
+
+        with(binding) {
+            etSearch.setOnClickListener {
+                showToast()
+            }
+            btnSwitchGenreMovies.setOnClickListener {
+                showToast()
+            }
+        }
     }
 
     private fun setupRecyclerView() {
@@ -101,9 +111,7 @@ class HomeFragment : Fragment() {
     private fun observeTrendingMovies() {
         if (activity != null) {
 //            trendingMoviesAdapter.onItemClick = { selectedData ->
-//                val intent = Intent(activity, DetailTourismActivity::class.java)
-//                intent.putExtra(DetailTourismActivity.EXTRA_DATA, selectedData)
-//                startActivity(intent)
+//                showToast()
 //            }
 
             homeViewModel.trendingMovies.observe(viewLifecycleOwner) { trendingMovies ->
@@ -129,6 +137,11 @@ class HomeFragment : Fragment() {
 
     private fun observeGenresMovie() {
         if (activity != null) {
+
+            genresMovieAdapter.onItemClick = { selectedData ->
+                showToast()
+            }
+
             homeViewModel.genresMovie.observe(viewLifecycleOwner) { genresMovie ->
                 if (genresMovie != null) {
                     when (genresMovie) {
@@ -153,6 +166,13 @@ class HomeFragment : Fragment() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
 
+    }
+
+    private fun showToast() {
+        Toast.makeText(context,
+            "This feature is not available yet",
+            Toast.LENGTH_SHORT)
+            .show()
     }
 
 }
