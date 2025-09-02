@@ -11,4 +11,6 @@ class HomeViewModel @Inject constructor(moviesUseCase: MoviesUseCase) : ViewMode
     val popularMovies = moviesUseCase.getPopularMovies().asLiveData()
 
     val trendingMovies = moviesUseCase.getTrendingMovies().asLiveData()
+
+    val genresMovie = moviesUseCase.getGenresMovie().asLiveData()
 }

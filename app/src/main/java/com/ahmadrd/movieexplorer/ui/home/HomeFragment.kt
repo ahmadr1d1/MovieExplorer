@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ahmadrd.movieexplorer.R
 import com.ahmadrd.movieexplorer.core.data.Resource
+import com.ahmadrd.movieexplorer.core.ui.ListGenreMoviesAdapter
 import com.ahmadrd.movieexplorer.core.ui.ListPopularMoviesAdapter
 import com.ahmadrd.movieexplorer.core.ui.ListTrendingMoviesAdapter
 import com.ahmadrd.movieexplorer.databinding.FragmentHomeBinding
@@ -22,6 +23,9 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val homeViewModel: HomeViewModel by viewModels()
+    private val popularMoviesAdapter = ListPopularMoviesAdapter()
+    private val trendingMoviesAdapter = ListTrendingMoviesAdapter()
+    private val genresMovieAdapter = ListGenreMoviesAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,14 +38,39 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupRecyclerView()
         observePopularMovies()
         observeTrendingMovies()
+        observeGenresMovie()
+    }
+
+    private fun setupRecyclerView() {
+        with(binding.rvPopularMovies) {
+            layoutManager = GridLayoutManager(context, 2)
+            adapter = popularMoviesAdapter
+        }
+
+        with(binding.rvTrendingMovies) {
+            layoutManager = LinearLayoutManager(
+                context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            adapter = trendingMoviesAdapter
+        }
+
+        with(binding.rvGenresMovies) {
+            layoutManager = LinearLayoutManager(
+                context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            adapter = genresMovieAdapter
+        }
     }
 
     private fun observePopularMovies() {
         if (activity != null) {
-
-            val popularMoviesAdapter = ListPopularMoviesAdapter()
 //            popularMoviesAdapter.onItemClick = { selectedData ->
 //                val intent = Intent(activity, DetailTourismActivity::class.java)
 //                intent.putExtra(DetailTourismActivity.EXTRA_DATA, selectedData)
@@ -66,18 +95,11 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
-
-            with(binding.rvPopularMovies) {
-                layoutManager = GridLayoutManager(context, 2)
-                adapter = popularMoviesAdapter
-            }
         }
     }
 
     private fun observeTrendingMovies() {
         if (activity != null) {
-
-            val trendingMoviesAdapter = ListTrendingMoviesAdapter()
 //            trendingMoviesAdapter.onItemClick = { selectedData ->
 //                val intent = Intent(activity, DetailTourismActivity::class.java)
 //                intent.putExtra(DetailTourismActivity.EXTRA_DATA, selectedData)
@@ -102,14 +124,28 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
 
-            with(binding.rvTrendingMovies) {
-                layoutManager = LinearLayoutManager(
-                    context,
-                    LinearLayoutManager.HORIZONTAL,
-                    false
-                )
-                adapter = trendingMoviesAdapter
+    private fun observeGenresMovie() {
+        if (activity != null) {
+            homeViewModel.genresMovie.observe(viewLifecycleOwner) { genresMovie ->
+                if (genresMovie != null) {
+                    when (genresMovie) {
+                        is Resource.Loading -> showLoading(true)
+                        is Resource.Success -> {
+                            showLoading(false)
+                            genresMovieAdapter.submitList(genresMovie.data)
+                        }
+
+                        is Resource.Error -> {
+                            showLoading(false)
+                            binding.viewError.root.visibility = View.VISIBLE
+                            binding.viewError.tvErrorMessage.text =
+                                genresMovie.message ?: getString(R.string.something_wrong)
+                        }
+                    }
+                }
             }
         }
     }

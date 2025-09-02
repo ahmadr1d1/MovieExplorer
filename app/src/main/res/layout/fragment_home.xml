@@ -62,7 +62,7 @@
                     android:id="@+id/til_search"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="🔍 Search movies, actors, genres..."
+                    android:hint="🔍 Search movies..."
                     app:boxBackgroundColor="@color/search_background"
                     app:boxBackgroundMode="filled"
                     app:boxCornerRadiusBottomEnd="25dp"
@@ -90,8 +90,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:orientation="vertical">
+                android:layout_marginBottom="20dp">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_genres_movies"
@@ -180,16 +179,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:nestedScrollingEnabled="false"
+                    android:paddingBottom="62dp"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:spanCount="2"
-                    android:paddingBottom="62dp"
                     tools:listitem="@layout/item_popular_movies" />
 
             </LinearLayout>
-
-
-
-
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
@@ -211,10 +206,10 @@
         android:layout_height="wrap_content"
         android:indeterminateTint="@color/accent_color"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
