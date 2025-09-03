@@ -1,14 +1,11 @@
 package com.ahmadrd.movieexplorer.core.utils
 
+import com.ahmadrd.movieexplorer.core.data.source.local.entity.CastingMovieEntity
 import com.ahmadrd.movieexplorer.core.data.source.local.entity.GenresMovieEntity
 import com.ahmadrd.movieexplorer.core.data.source.local.entity.PopularMoviesEntity
 import com.ahmadrd.movieexplorer.core.data.source.local.entity.TrendingMoviesEntity
-import com.ahmadrd.movieexplorer.core.data.source.remote.response.GenresItem
-import com.ahmadrd.movieexplorer.core.data.source.remote.response.ResultsItem
-import com.ahmadrd.movieexplorer.core.data.source.remote.response.ResultsTrendingMovies
-import com.ahmadrd.movieexplorer.core.domain.model.GenresMovie
-import com.ahmadrd.movieexplorer.core.domain.model.PopularMovies
-import com.ahmadrd.movieexplorer.core.domain.model.TrendingMovies
+import com.ahmadrd.movieexplorer.core.data.source.remote.response.*
+import com.ahmadrd.movieexplorer.core.domain.model.*
 
 object DataMapper {
 
@@ -203,4 +200,63 @@ object DataMapper {
             )
         }
     }
+
+    // Casting Movie Mappers
+    fun List<CastingItem>.toEntities(movieId: Int): List<CastingMovieEntity> {
+        return this.map { castItem ->
+            CastingMovieEntity(
+                movieId = movieId,
+                castId = castItem.castId,
+                character = castItem.character,
+                gender = castItem.gender,
+                creditId = castItem.creditId,
+                knownForDepartment = castItem.knownForDepartment,
+                originalName = castItem.originalName,
+                popularity = castItem.popularity,
+                name = castItem.name,
+                profilePath = castItem.profilePath,
+                id = castItem.id,
+                adult = castItem.adult,
+                order = castItem.order
+            )
+        }
+    }
+
+
+    fun List<CastingMovieEntity>.toDomain(): List<CastingMovie> {
+        return this.map { entity ->
+            CastingMovie(
+                id = entity.id,
+                movieId = entity.movieId,
+                castId = entity.castId,
+                character = entity.character,
+                gender = entity.gender,
+                creditId = entity.creditId,
+                knownForDepartment = entity.knownForDepartment,
+                originalName = entity.originalName,
+                popularity = entity.popularity,
+                name = entity.name,
+                profilePath = entity.profilePath,
+                adult = entity.adult,
+                order = entity.order
+            )
+        }
+    }
+
+    fun CastingMovie.toEntity(): CastingMovieEntity =
+        CastingMovieEntity(
+            id = this.id,
+            movieId = this.movieId,
+            castId = this.castId,
+            character = this.character,
+            gender = this.gender,
+            creditId = this.creditId,
+            knownForDepartment = this.knownForDepartment,
+            originalName = this.originalName,
+            popularity = this.popularity,
+            name = this.name,
+            profilePath = this.profilePath,
+            adult = this.adult,
+            order = this.order
+        )
 }

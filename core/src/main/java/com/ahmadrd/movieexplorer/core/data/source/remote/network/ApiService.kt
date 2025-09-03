@@ -1,8 +1,6 @@
 package com.ahmadrd.movieexplorer.core.data.source.remote.network
 
-import com.ahmadrd.movieexplorer.core.data.source.remote.response.GenresMovieResponse
-import com.ahmadrd.movieexplorer.core.data.source.remote.response.PopularMoviesResponse
-import com.ahmadrd.movieexplorer.core.data.source.remote.response.TrendingMoviesResponse
+import com.ahmadrd.movieexplorer.core.data.source.remote.response.*
 import retrofit2.http.*
 
 interface ApiService {
@@ -20,4 +18,13 @@ interface ApiService {
 
     @GET("genre/movie/list")
     suspend fun getGenres(): GenresMovieResponse
+
+    @GET("movie/{movie_id}")
+    suspend fun getDetailMovie(@Path("movie_id") movieId: Int): DetailMovieResponse
+
+    @GET("movie/{movie_id}/credits")
+    suspend fun getCastingMovie(@Path("movie_id") movieId: Int): CastingMovieResponse
+
+    @GET("movie/{movie_id}/similar")
+    suspend fun getSimilarMovies(@Path("movie_id") movieId: Int): SimilarMovieResponse
 }

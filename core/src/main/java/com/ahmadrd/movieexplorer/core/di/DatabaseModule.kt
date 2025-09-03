@@ -2,9 +2,12 @@ package com.ahmadrd.movieexplorer.core.di
 
 import android.content.Context
 import androidx.room.Room
+import com.ahmadrd.movieexplorer.core.data.source.local.room.CastingMovieDao
+import com.ahmadrd.movieexplorer.core.data.source.local.room.DetailMovieDao
 import com.ahmadrd.movieexplorer.core.data.source.local.room.GenresMovieDao
 import com.ahmadrd.movieexplorer.core.data.source.local.room.MoviesDatabase
 import com.ahmadrd.movieexplorer.core.data.source.local.room.PopularMoviesDao
+import com.ahmadrd.movieexplorer.core.data.source.local.room.SimilarMoviesDao
 import com.ahmadrd.movieexplorer.core.data.source.local.room.TrendingMoviesDao
 import dagger.Module
 import dagger.Provides
@@ -39,5 +42,20 @@ class DatabaseModule {
     @Provides
     fun provideGenresMovieDao(database: MoviesDatabase): GenresMovieDao =
         database.genresMovieDao()
+
+    @Singleton
+    @Provides
+    fun provideDetailMovieDao(database: MoviesDatabase): DetailMovieDao =
+        database.detailMovieDao()
+
+    @Singleton
+    @Provides
+    fun provideCastingMovieDao(database: MoviesDatabase): CastingMovieDao =
+        database.castingMovieDao()
+
+    @Singleton
+    @Provides
+    fun provideSimilarMoviesDao(database: MoviesDatabase): SimilarMoviesDao =
+        database.similarMoviesDao()
 
 }

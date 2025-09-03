@@ -3,15 +3,13 @@ package com.ahmadrd.movieexplorer.core.data
 import com.ahmadrd.movieexplorer.core.data.source.local.LocalDataSource
 import com.ahmadrd.movieexplorer.core.data.source.remote.RemoteDataSource
 import com.ahmadrd.movieexplorer.core.data.source.remote.network.ApiResponse
-import com.ahmadrd.movieexplorer.core.data.source.remote.response.GenresItem
-import com.ahmadrd.movieexplorer.core.data.source.remote.response.ResultsItem
-import com.ahmadrd.movieexplorer.core.data.source.remote.response.ResultsTrendingMovies
-import com.ahmadrd.movieexplorer.core.domain.model.GenresMovie
-import com.ahmadrd.movieexplorer.core.domain.model.PopularMovies
-import com.ahmadrd.movieexplorer.core.domain.model.TrendingMovies
+import com.ahmadrd.movieexplorer.core.data.source.remote.response.*
+import com.ahmadrd.movieexplorer.core.domain.model.*
 import com.ahmadrd.movieexplorer.core.domain.repository.IMoviesRepository
 import com.ahmadrd.movieexplorer.core.utils.AppExecutors
 import com.ahmadrd.movieexplorer.core.utils.DataMapper
+import com.ahmadrd.movieexplorer.core.utils.DataMapper.toDomain
+import com.ahmadrd.movieexplorer.core.utils.DataMapper.toEntities
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
@@ -134,4 +132,34 @@ class MoviesRepository @Inject constructor(
                 localDataSource.insertGenresMovie(genresList)
             }
         }.asFlow()
+
+    override fun getDetailMovie(movieId: Int): Flow<Resource<DetailMovie>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getCastingMovie(movieId: Int): Flow<Resource<List<CastingMovie>>> =
+        object : NetworkBoundResource<List<CastingMovie>, List<CastingItem>>() {
+
+            override fun loadFromDB(): Flow<List<CastingMovie>> {
+                return localDataSource.getCastingMovie(movieId).map { entities ->
+                    entities.toDomain()
+                }
+            }
+
+            override fun shouldFetch(data: List<CastingMovie>?): Boolean =
+                data.isNullOrEmpty()
+
+            override suspend fun createCall(): Flow<ApiResponse<List<CastingItem>>> =
+                remoteDataSource.getCastingMovie(movieId)
+
+            override suspend fun saveCallResult(data: List<CastingItem>) {
+                val entities = data.toEntities(movieId)
+                localDataSource.insertCastingMovie(entities)
+            }
+        }.asFlow()
+
+
+    override fun getSimilarMovies(movieId: Int): Flow<Resource<List<SimilarMovie>>> {
+        TODO("Not yet implemented")
+    }
 }
