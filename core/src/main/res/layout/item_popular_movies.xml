@@ -64,6 +64,7 @@
                 android:maxLines="2"
                 android:layout_marginEnd="4dp"
                 android:textSize="16sp"
+                android:textColor="@color/text_primary"
                 android:fontFamily="@font/archivo_bold"
                 android:textStyle="bold"
                 android:text="@string/popular_movies_title"
