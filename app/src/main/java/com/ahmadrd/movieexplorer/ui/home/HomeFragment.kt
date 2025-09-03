@@ -1,5 +1,6 @@
 package com.ahmadrd.movieexplorer.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import com.ahmadrd.movieexplorer.core.ui.ListGenreMoviesAdapter
 import com.ahmadrd.movieexplorer.core.ui.ListPopularMoviesAdapter
 import com.ahmadrd.movieexplorer.core.ui.ListTrendingMoviesAdapter
 import com.ahmadrd.movieexplorer.databinding.FragmentHomeBinding
+import com.ahmadrd.movieexplorer.ui.detail.DetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -81,11 +83,6 @@ class HomeFragment : Fragment() {
 
     private fun observePopularMovies() {
         if (activity != null) {
-//            popularMoviesAdapter.onItemClick = { selectedData ->
-//                val intent = Intent(activity, DetailTourismActivity::class.java)
-//                intent.putExtra(DetailTourismActivity.EXTRA_DATA, selectedData)
-//                startActivity(intent)
-//            }
 
             homeViewModel.popularMovies.observe(viewLifecycleOwner) { popularMovies ->
                 if (popularMovies != null) {
@@ -94,6 +91,15 @@ class HomeFragment : Fragment() {
                         is Resource.Success -> {
                             showLoading(false)
                             popularMoviesAdapter.submitList(popularMovies.data)
+
+                            popularMoviesAdapter.onItemClick = {
+                                val intent = Intent(activity, DetailActivity::class.java)
+                                intent.putExtra(
+                                    DetailActivity.EXTRA_MOVIE_ID,
+                                    popularMovies.data?.get(0)?.id
+                                )
+                                startActivity(intent)
+                            }
                         }
 
                         is Resource.Error -> {
@@ -165,13 +171,14 @@ class HomeFragment : Fragment() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-
     }
 
     private fun showToast() {
-        Toast.makeText(context,
+        Toast.makeText(
+            context,
             "This feature is not available yet",
-            Toast.LENGTH_SHORT)
+            Toast.LENGTH_SHORT
+        )
             .show()
     }
 
