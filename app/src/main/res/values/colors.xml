@@ -35,7 +35,7 @@
     <color name="surface_elevated">#FFF1F5F9</color>      <!-- Elevated surface -->
 
     <!-- Border & Divider -->
-    <color name="border_light">#FFE2E8F0</color>          <!-- Light border -->
+    <color name="border_light">#FF475569</color>          <!-- Light border -->
     <color name="border_dark">#FF334155</color>           <!-- Dark border -->
     <color name="divider">#FFCBD5E0</color>               <!-- Divider color -->
 
