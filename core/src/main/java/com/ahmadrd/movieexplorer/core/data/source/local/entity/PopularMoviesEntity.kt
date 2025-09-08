@@ -11,44 +11,43 @@ data class PopularMoviesEntity(
     val id: Int,
 
     @ColumnInfo(name = "overview")
-    val overview: String,
+    val overview: String? = null,
 
     @ColumnInfo(name = "originalLanguage")
-    val originalLanguage: String,
+    val originalLanguage: String? = null,
 
     @ColumnInfo(name = "originalTitle")
-    val originalTitle: String,
+    val originalTitle: String? = null,
 
     @ColumnInfo(name = "video")
-    val video: Boolean,
+    val video: Boolean? = null,
 
     @ColumnInfo(name = "title")
-    val title: String,
+    val title: String? = null,
 
     @ColumnInfo(name = "genreIds")
-    val genreIds: List<Int>,
+    val genreIds: List<Int>? = null,
 
     @ColumnInfo(name = "posterPath")
-    val posterPath: String,
+    val posterPath: String? = null,
 
     @ColumnInfo(name = "backdropPath")
-    val backdropPath: String,
+    val backdropPath: String? = null,
 
     @ColumnInfo(name = "releaseDate")
-    val releaseDate: String,
+    val releaseDate: String? = null,
 
     @ColumnInfo(name = "popularity")
-    val popularity: Double,
+    val popularity: Double? = null,
 
     @ColumnInfo(name = "voteAverage")
-    val voteAverage: Double,
+    val voteAverage: Double? = null,
 
     @ColumnInfo(name = "adult")
-    val adult: Boolean,
+    val adult: Boolean? = null,
 
     @ColumnInfo(name = "voteCount")
-    val voteCount: Int,
+    val voteCount: Int? = null,
 
-    @ColumnInfo(name = "isFavorite")
     var isFavorite: Boolean = false
 )

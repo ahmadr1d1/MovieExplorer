@@ -22,41 +22,41 @@ import androidx.room.Entity
 )
 data class CastingMovieEntity(
 
-    val id: Int,
+    val id: Int, // Cannot null error KSP Room
 
-    val movieId: Int,
+    val movieId: Int, // Cannot null error KSP Room
 
     @ColumnInfo(name = "cast_id")
-    val castId: Int,
+    val castId: Int? = null,
 
     @ColumnInfo(name = "character")
-    val character: String,
+    val character: String? = null,
 
     @ColumnInfo(name = "gender")
-    val gender: Int,
+    val gender: Int? = null,
 
     @ColumnInfo(name = "credit_id")
-    val creditId: String,
+    val creditId: String? = null,
 
     @ColumnInfo(name = "known_for_department")
-    val knownForDepartment: String,
+    val knownForDepartment: String? = null,
 
     @ColumnInfo(name = "original_name")
-    val originalName: String,
+    val originalName: String? = null,
 
     @ColumnInfo(name = "popularity")
-    val popularity: Double,
+    val popularity: Double? = null,
 
     @ColumnInfo(name = "name")
-    val name: String,
+    val name: String? = null,
 
     @ColumnInfo(name = "profile_path")
     val profilePath: String? = null,
 
     @ColumnInfo(name = "adult")
-    val adult: Boolean,
+    val adult: Boolean? = null,
 
     @ColumnInfo(name = "order")
-    val order: Int
+    val order: Int? = null
 )
 

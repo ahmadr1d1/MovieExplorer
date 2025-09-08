@@ -6,20 +6,20 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmadrd.movieexplorer.core.R
-import com.ahmadrd.movieexplorer.core.databinding.ItemPopularMoviesBinding
-import com.ahmadrd.movieexplorer.core.domain.model.PopularMovies
+import com.ahmadrd.movieexplorer.core.databinding.ItemSimilarMovieBinding
+import com.ahmadrd.movieexplorer.core.domain.model.SimilarMovies
 import com.ahmadrd.movieexplorer.core.utils.TMDBImage
 import com.bumptech.glide.Glide
 import kotlin.math.round
 
-class ListPopularMoviesAdapter :
-    ListAdapter<PopularMovies, ListPopularMoviesAdapter.ListViewHolder>(DIFF_CALLBACK) {
+class ListSimilarMoviesAdapter :
+    ListAdapter<SimilarMovies, ListSimilarMoviesAdapter.ListViewHolder>(DIFF_CALLBACK) {
 
-    var onItemClick: ((PopularMovies) -> Unit)? = null
+    var onItemClick: ((SimilarMovies) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ListViewHolder(
-            ItemPopularMoviesBinding.inflate(
+            ItemSimilarMovieBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -31,17 +31,17 @@ class ListPopularMoviesAdapter :
         holder.bind(data)
     }
 
-    inner class ListViewHolder(private var binding: ItemPopularMoviesBinding) :
+    inner class ListViewHolder(private var binding: ItemSimilarMovieBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: PopularMovies) {
+        fun bind(data: SimilarMovies) {
             Glide.with(itemView.context)
                 .load(TMDBImage.BASE_IMAGE_URL + data.posterPath)
                 .error(R.drawable.baseline_broken_image_24)
-                .into(binding.popularMoviesImage)
-            binding.popularMoviesTitle.text = data.title
-            binding.popularMoviesReleaseDate.text = data.releaseDate
-            binding.ratingPopularMovies.text = formatRating(data.voteAverage ?: -0.0)
-            binding.genrePopularMovies.text = data.genreNames?.joinToString(", ")
+                .into(binding.similarMoviesImage)
+            binding.similarMoviesTitle.text = data.title
+            binding.similarMoviesReleaseDate.text = data.releaseDate
+            binding.ratingSimilarMovies.text = formatRating(data.voteAverage ?: -0.0)
+            binding.genreSimilarMovies.text = data.genreNames?.joinToString(", ")
         }
 
         init {
@@ -57,18 +57,18 @@ class ListPopularMoviesAdapter :
     }
 
     companion object {
-        val DIFF_CALLBACK: DiffUtil.ItemCallback<PopularMovies> =
-            object : DiffUtil.ItemCallback<PopularMovies>() {
+        val DIFF_CALLBACK: DiffUtil.ItemCallback<SimilarMovies> =
+            object : DiffUtil.ItemCallback<SimilarMovies>() {
                 override fun areItemsTheSame(
-                    oldItem: PopularMovies,
-                    newItem: PopularMovies
+                    oldItem: SimilarMovies,
+                    newItem: SimilarMovies
                 ): Boolean {
                     return oldItem.id == newItem.id
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: PopularMovies,
-                    newItem: PopularMovies
+                    oldItem: SimilarMovies,
+                    newItem: SimilarMovies
                 ): Boolean {
                     return oldItem == newItem
                 }

@@ -10,11 +10,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SimilarMoviesDao {
 
-    @Query("SELECT * FROM similar_movies")
+    @Query("SELECT * FROM similar_movies WHERE movieId = :movieId")
     fun getSimilarMovies(movieId: Int): Flow<List<SimilarMoviesEntity>>
-
-//    @Query("SELECT * FROM similar_movies WHERE movieId = :movieId")
-//    fun getSimilarMovies(movieId: Int): Flow<List<SimilarMoviesEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSimilarMovies(movies: List<SimilarMoviesEntity>)

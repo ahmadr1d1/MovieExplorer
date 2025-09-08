@@ -6,5 +6,5 @@ import androidx.room.*
 data class GenresMovieEntity (
     @PrimaryKey
     val id: Int,
-    val name: String
+    val name: String? = null
 )

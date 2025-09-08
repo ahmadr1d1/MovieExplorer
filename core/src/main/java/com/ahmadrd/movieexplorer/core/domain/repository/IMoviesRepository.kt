@@ -5,7 +5,7 @@ import com.ahmadrd.movieexplorer.core.domain.model.CastingMovie
 import com.ahmadrd.movieexplorer.core.domain.model.DetailMovie
 import com.ahmadrd.movieexplorer.core.domain.model.GenresMovie
 import com.ahmadrd.movieexplorer.core.domain.model.PopularMovies
-import com.ahmadrd.movieexplorer.core.domain.model.SimilarMovie
+import com.ahmadrd.movieexplorer.core.domain.model.SimilarMovies
 import com.ahmadrd.movieexplorer.core.domain.model.TrendingMovies
 import kotlinx.coroutines.flow.Flow
 
@@ -31,5 +31,5 @@ interface IMoviesRepository {
     fun getCastingMovie(movieId: Int): Flow<Resource<List<CastingMovie>>>
 
     // Similar Movie
-    fun getSimilarMovies(movieId: Int): Flow<Resource<List<SimilarMovie>>>
+    fun getSimilarMovies(movieId: Int): Flow<Resource<List<SimilarMovies>>>
 }

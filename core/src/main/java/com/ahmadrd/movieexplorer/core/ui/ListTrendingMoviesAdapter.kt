@@ -40,8 +40,8 @@ class ListTrendingMoviesAdapter :
                 .into(binding.trendingMoviesImage)
             binding.titleTrendingMovies.text = data.title
             binding.releaseDateTrendingMovies.text = data.releaseDate
-            binding.ratingTrendingMovies.text = formatRating(data.voteAverage)
-            binding.genreTrendingMovies.text = data.genreNames.joinToString ( ", " )
+            binding.ratingTrendingMovies.text = formatRating(data.voteAverage ?: -0.0)
+            binding.genreTrendingMovies.text = data.genreNames?.joinToString ( ", " )
         }
 
         init {

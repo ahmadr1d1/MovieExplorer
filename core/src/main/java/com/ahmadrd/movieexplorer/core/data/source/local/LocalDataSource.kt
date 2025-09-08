@@ -63,7 +63,8 @@ class LocalDataSource @Inject constructor(
         genresMovieDao.insertGenresMovie(genres)
 
     // Detail Movie
-    fun getDetailMovie(movieId: Int): Flow<DetailMovieEntity?> = detailMovieDao.getDetailMovie(movieId)
+    fun getDetailMovie(movieId: Int): Flow<DetailMovieEntity?> =
+        detailMovieDao.getDetailMovie(movieId)
 
     suspend fun insertDetailMovie(movie: DetailMovieEntity) =
         detailMovieDao.insertDetailMovie(movie)

@@ -1,27 +1,34 @@
 package com.ahmadrd.movieexplorer.core.domain.model
 
 import android.os.Parcelable
+import com.ahmadrd.movieexplorer.core.data.source.remote.response.GenresItem
+import com.ahmadrd.movieexplorer.core.utils.GenresItemParceler
 import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.TypeParceler
 
 @Parcelize
+@TypeParceler<GenresItem, GenresItemParceler>
 data class DetailMovie(
+    val originalLanguage: String? = null,
+    val imdbId: String? = null,
+    val video: Boolean? = null,
+    val title: String? = null,
+    val backdropPath: String? = null,
+    val revenue: Int? = null,
+    val genres: List<GenresItem>?,
+    val popularity: Double? = null,
     val id: Int,
-    val title: String,
-    val overview: String,
-    val posterPath: String?,
-    val backdropPath: String?,
-    val releaseDate: String,
-    val voteAverage: Double,
-    val voteCount: Int,
-    val tagline: String?,
-    val status: String,
-    val runtime: Int?,
-    val originalLanguage: String,
-    val originalTitle: String,
-    val popularity: Double,
-    val homepage: String?,
-    val imdbId: String?,
-    val adult: Boolean,
-    val genres: List<String>, // Assuming genre names will be mapped here
-    var isFavorite: Boolean = false // Assuming similar favorite handling
+    val voteCount: Int? = null,
+    val budget: Int? = null,
+    val overview: String? = null,
+    val originalTitle: String? = null,
+    val runtime: Int? = null,
+    val posterPath: String? = null,
+    val originCountry: List<String>? = null,
+    val releaseDate: String? = null,
+    val voteAverage: Double? = null,
+    val tagline: String? = null,
+    val adult: Boolean? = null,
+    val homepage: String? = null,
+    val status: String? = null
 ) : Parcelable

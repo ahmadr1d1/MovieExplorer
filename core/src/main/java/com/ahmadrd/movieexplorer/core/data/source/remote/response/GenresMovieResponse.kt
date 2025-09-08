@@ -5,14 +5,14 @@ import com.google.gson.annotations.SerializedName
 data class GenresMovieResponse(
 
 	@field:SerializedName("genres")
-	val genres: List<GenresItem>
+	val genres: List<GenresItem> = emptyList()
 )
 
 data class GenresItem(
 
 	@field:SerializedName("name")
-	val name: String,
+	val name: String? = null,
 
 	@field:SerializedName("id")
-	val id: Int
+	val id: Int? = null
 )

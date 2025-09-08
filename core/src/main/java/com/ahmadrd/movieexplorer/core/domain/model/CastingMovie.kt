@@ -19,15 +19,15 @@ import kotlinx.parcelize.Parcelize
 data class CastingMovie(
     val movieId: Int,
     val id: Int,
-    val castId: Int,
-    val character: String,
-    val gender: Int,
-    val creditId: String,
-    val knownForDepartment: String,
-    val originalName: String,
-    val popularity: Double,
-    val name: String,
+    val castId: Int? = null,
+    val character: String? = null,
+    val gender: Int? = null,
+    val creditId: String? = null,
+    val knownForDepartment: String? = null,
+    val originalName: String? = null,
+    val popularity: Double? = null,
+    val name: String? = null,
     val profilePath: String? = null,
-    val adult: Boolean,
-    val order: Int
+    val adult: Boolean? = null,
+    val order: Int? = null
 ) : Parcelable

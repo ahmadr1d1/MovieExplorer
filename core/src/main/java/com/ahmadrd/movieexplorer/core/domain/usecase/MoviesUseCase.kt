@@ -5,7 +5,7 @@ import com.ahmadrd.movieexplorer.core.domain.model.CastingMovie
 import com.ahmadrd.movieexplorer.core.domain.model.DetailMovie
 import com.ahmadrd.movieexplorer.core.domain.model.GenresMovie
 import com.ahmadrd.movieexplorer.core.domain.model.PopularMovies
-import com.ahmadrd.movieexplorer.core.domain.model.SimilarMovie
+import com.ahmadrd.movieexplorer.core.domain.model.SimilarMovies
 import com.ahmadrd.movieexplorer.core.domain.model.TrendingMovies
 import kotlinx.coroutines.flow.Flow
 
@@ -16,7 +16,7 @@ interface MoviesUseCase {
     fun getFavoritePopularMovies(): Flow<List<PopularMovies>>
     fun setFavoriteMovies(popularMovies: PopularMovies, state: Boolean)
 
-    // Trending All
+    // Trending Movies (day)
     fun getTrendingMovies(): Flow<Resource<List<TrendingMovies>>>
     fun getFavoriteTrendingMovies(): Flow<List<TrendingMovies>>
     fun setFavoriteTrendingMovies(trendingMovies: TrendingMovies, state: Boolean)
@@ -31,6 +31,6 @@ interface MoviesUseCase {
     fun getCastingMovie(movieId: Int): Flow<Resource<List<CastingMovie>>>
 
     // Similar Movie
-    fun getSimilarMovies(movieId: Int): Flow<Resource<List<SimilarMovie>>>
+    fun getSimilarMovies(movieId: Int): Flow<Resource<List<SimilarMovies>>>
 
 }

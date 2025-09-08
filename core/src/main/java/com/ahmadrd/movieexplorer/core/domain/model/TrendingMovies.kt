@@ -7,35 +7,20 @@ import kotlinx.parcelize.Parcelize
 data class TrendingMovies(
 
     val id: Int,
-
-    val overview: String,
-
-    val originalLanguage: String,
-
-    val originalTitle: String,
-
-    val video: Boolean,
-
-    val title: String,
-    val genreIds: List<Int>,
-
-    val posterPath: String,
-
-    val backdropPath: String,
-
-    val mediaType: String,
-
-    val releaseDate: String,
-
-    val popularity: Double,
-
-    val voteAverage: Double,
-
-    val adult: Boolean,
-
-    val voteCount: Int,
-
-    val genreNames: List<String>,
-
-    var isFavorite: Boolean
-): Parcelable
+    val overview: String? = null,
+    val originalLanguage: String? = null,
+    val originalTitle: String? = null,
+    val video: Boolean? = null,
+    val title: String? = null,
+    val genreIds: List<Int>? = null,
+    val posterPath: String? = null,
+    val backdropPath: String? = null,
+    val mediaType: String? = null,
+    val releaseDate: String? = null,
+    val popularity: Double? = null,
+    val voteAverage: Double? = null,
+    val adult: Boolean? = null,
+    val voteCount: Int? = null,
+    val genreNames: List<String>? = null,
+    var isFavorite: Boolean = false
+) : Parcelable

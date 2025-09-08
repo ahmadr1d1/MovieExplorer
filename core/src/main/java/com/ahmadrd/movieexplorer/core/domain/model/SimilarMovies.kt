@@ -3,9 +3,16 @@ package com.ahmadrd.movieexplorer.core.domain.model
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
+/**
+ * Identifiers used in the movie similar response.
+ *
+ * @param id      The identifier of the similar movie.
+ * @param movieId The identifier of the detailed movie.
+ */
 @Parcelize
-data class PopularMovies(
+data class SimilarMovies(
     val id: Int,
+    val movieId: Int,
     val overview: String? = null,
     val originalLanguage: String? = null,
     val originalTitle: String? = null,
@@ -18,7 +25,6 @@ data class PopularMovies(
     val popularity: Double? = null,
     val voteAverage: Double? = null,
     val adult: Boolean? = null,
-    val voteCount: Int? = null,
     val genreNames: List<String>? = null,
-    var isFavorite: Boolean = false
+    val voteCount: Int? = null
 ) : Parcelable

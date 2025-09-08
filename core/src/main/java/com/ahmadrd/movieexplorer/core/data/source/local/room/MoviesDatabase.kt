@@ -17,7 +17,7 @@ import com.ahmadrd.movieexplorer.core.utils.Converters
     DetailMovieEntity::class,
     CastingMovieEntity::class,
     SimilarMoviesEntity::class],
-    version = 4,
+    version = 10,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

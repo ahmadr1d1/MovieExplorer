@@ -12,9 +12,7 @@ interface ApiService {
     ): PopularMoviesResponse
 
     @GET("trending/movie/day")
-    suspend fun getTrendingMovies(
-        @Query("time_window") timeWindow: String = "day"
-    ): TrendingMoviesResponse
+    suspend fun getTrendingMovies(): TrendingMoviesResponse
 
     @GET("genre/movie/list")
     suspend fun getGenres(): GenresMovieResponse

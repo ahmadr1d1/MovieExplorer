@@ -1,6 +1,8 @@
 package com.ahmadrd.movieexplorer.core.data
 
 import com.ahmadrd.movieexplorer.core.data.source.local.LocalDataSource
+import com.ahmadrd.movieexplorer.core.data.source.local.entity.GenresMovieEntity
+import com.ahmadrd.movieexplorer.core.data.source.local.entity.SimilarMoviesEntity
 import com.ahmadrd.movieexplorer.core.data.source.remote.RemoteDataSource
 import com.ahmadrd.movieexplorer.core.data.source.remote.network.ApiResponse
 import com.ahmadrd.movieexplorer.core.data.source.remote.response.*
@@ -9,7 +11,6 @@ import com.ahmadrd.movieexplorer.core.domain.repository.IMoviesRepository
 import com.ahmadrd.movieexplorer.core.utils.AppExecutors
 import com.ahmadrd.movieexplorer.core.utils.DataMapper
 import com.ahmadrd.movieexplorer.core.utils.DataMapper.toDomain
-import com.ahmadrd.movieexplorer.core.utils.DataMapper.toEntities
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
@@ -29,21 +30,21 @@ class MoviesRepository @Inject constructor(
                 val popularMovieEntitiesFlow = localDataSource.getPopularMovies()
                 val allGenreEntitiesFlow = localDataSource.getGenresMovie()
 
-                // Mendapatkan nama genre
+                // Get genres name
                 return popularMovieEntitiesFlow.combine(allGenreEntitiesFlow) { movieEntities, genreEntities ->
                     val allGenresDomain = DataMapper.mapGenreEntitiesToDomain(genreEntities)
-                    DataMapper.mapPMoviesEntitiesToDomain(movieEntities, allGenresDomain)
+                    DataMapper.mapPopularMoviesEntitiesToDomain(movieEntities, allGenresDomain)
                 }
             }
 
             override fun shouldFetch(data: List<PopularMovies>?): Boolean =
-                true
+                data.isNullOrEmpty() // Set true if want to always fetch from remote API
 
             override suspend fun createCall(): Flow<ApiResponse<List<ResultsItem>>> =
                 remoteDataSource.getPopularMovies()
 
             override suspend fun saveCallResult(data: List<ResultsItem>) {
-                val popularMoviesList = DataMapper.mapPMoviesResponsesToEntities(data)
+                val popularMoviesList = DataMapper.mapPopularMoviesResponsesToEntities(data)
                 localDataSource.insertPopularMovies(popularMoviesList)
             }
         }.asFlow()
@@ -54,12 +55,12 @@ class MoviesRepository @Inject constructor(
 
         return favoriteMovieEntitiesFlow.combine(allGenreEntitiesFlow) { movieEntities, genreEntities ->
             val allGenresDomain = DataMapper.mapGenreEntitiesToDomain(genreEntities)
-            DataMapper.mapPMoviesEntitiesToDomain(movieEntities, allGenresDomain)
+            DataMapper.mapPopularMoviesEntitiesToDomain(movieEntities, allGenresDomain)
         }
     }
 
     override fun setFavoriteMovies(popularMovies: PopularMovies, state: Boolean) {
-        val moviesEntity = DataMapper.mapPMoviesDomainToEntity(popularMovies)
+        val moviesEntity = DataMapper.mapPopularMoviesDomainToEntity(popularMovies)
         appExecutors.diskIO()
             .execute {
                 localDataSource.updateFavoritePopularMovies(
@@ -68,21 +69,23 @@ class MoviesRepository @Inject constructor(
             }
     }
 
+
+
     override fun getTrendingMovies(): Flow<Resource<List<TrendingMovies>>> =
         object : NetworkBoundResource<List<TrendingMovies>, List<ResultsTrendingMovies>>() {
             override fun loadFromDB(): Flow<List<TrendingMovies>> {
                 val trendingMoviesEntitiesFlow = localDataSource.getTrendingMovies()
                 val allGenreEntitiesFlow = localDataSource.getGenresMovie()
 
-                // Mendapatkan nama genre
+                // Get genres name
                 return trendingMoviesEntitiesFlow.combine(allGenreEntitiesFlow) { movieEntities, genreEntities ->
                     val allGenresDomain = DataMapper.mapGenreEntitiesToDomain(genreEntities)
-                    DataMapper.mapTMoviesEntitiesToDomain(movieEntities, allGenresDomain)
+                    DataMapper.mapTrendingMoviesEntitiesToDomain(movieEntities, allGenresDomain)
                 }
             }
 
             override fun shouldFetch(data: List<TrendingMovies>?): Boolean =
-                true
+                data.isNullOrEmpty() // Set true if want to always fetch from remote API
 
             override suspend fun createCall(): Flow<ApiResponse<List<ResultsTrendingMovies>>> =
                 remoteDataSource.getTrendingMovies()
@@ -97,10 +100,10 @@ class MoviesRepository @Inject constructor(
         val trendingMoviesEntitiesFlow = localDataSource.getTrendingMovies()
         val allGenreEntitiesFlow = localDataSource.getGenresMovie()
 
-        // Mendapatkan nama genre
+        // Get genres name
         return trendingMoviesEntitiesFlow.combine(allGenreEntitiesFlow) { movieEntities, genreEntities ->
             val allGenresDomain = DataMapper.mapGenreEntitiesToDomain(genreEntities)
-            DataMapper.mapTMoviesEntitiesToDomain(movieEntities, allGenresDomain)
+            DataMapper.mapTrendingMoviesEntitiesToDomain(movieEntities, allGenresDomain)
         }
     }
 
@@ -109,9 +112,11 @@ class MoviesRepository @Inject constructor(
             .execute {
                 localDataSource.updateFavoriteTrendingMovies(
                     DataMapper.
-                    mapTMoviesDomainToEntity(trendingMovies), state
+                    mapTrendingMoviesDomainToEntity(trendingMovies), state
                 )
             }
+
+
 
     override fun getGenresMovie(): Flow<Resource<List<GenresMovie>>> =
         object : NetworkBoundResource<List<GenresMovie>, List<GenresItem>>() {
@@ -133,9 +138,28 @@ class MoviesRepository @Inject constructor(
             }
         }.asFlow()
 
-    override fun getDetailMovie(movieId: Int): Flow<Resource<DetailMovie>> {
-        TODO("Not yet implemented")
-    }
+
+
+    override fun getDetailMovie(movieId: Int): Flow<Resource<DetailMovie>> =
+        object : NetworkBoundResource<DetailMovie, DetailMovieResponse>() {
+            override fun loadFromDB(): Flow<DetailMovie?> {
+                return localDataSource.getDetailMovie(movieId)
+                    .map { it?.toDomain() }
+            }
+
+            override fun shouldFetch(data: DetailMovie?): Boolean =
+                data == null // Set true if want to always fetch from remote API
+
+            override suspend fun createCall(): Flow<ApiResponse<DetailMovieResponse>> =
+                remoteDataSource.getDetailMovie(movieId)
+
+            override suspend fun saveCallResult(data: DetailMovieResponse) {
+                val entity = DataMapper.mapDetailMovieResponseToEntities(data)
+                localDataSource.insertDetailMovie(entity)
+            }
+        }.asFlow()
+
+
 
     override fun getCastingMovie(movieId: Int): Flow<Resource<List<CastingMovie>>> =
         object : NetworkBoundResource<List<CastingMovie>, List<CastingItem>>() {
@@ -147,19 +171,42 @@ class MoviesRepository @Inject constructor(
             }
 
             override fun shouldFetch(data: List<CastingMovie>?): Boolean =
-                data.isNullOrEmpty()
+                data.isNullOrEmpty() // Set true if want to always fetch from remote API
 
             override suspend fun createCall(): Flow<ApiResponse<List<CastingItem>>> =
                 remoteDataSource.getCastingMovie(movieId)
 
             override suspend fun saveCallResult(data: List<CastingItem>) {
-                val entities = data.toEntities(movieId)
-                localDataSource.insertCastingMovie(entities)
+                val castingMovieList = DataMapper.mapCastingMovieResponsesToEntities(movieId, data)
+                localDataSource.insertCastingMovie(castingMovieList)
             }
         }.asFlow()
 
 
-    override fun getSimilarMovies(movieId: Int): Flow<Resource<List<SimilarMovie>>> {
-        TODO("Not yet implemented")
-    }
+
+    override fun getSimilarMovies(movieId: Int): Flow<Resource<List<SimilarMovies>>> =
+        object : NetworkBoundResource<List<SimilarMovies>, List<ResultsSimilar>>() {
+
+            override fun loadFromDB(): Flow<List<SimilarMovies>> {
+                val similarMovieEntitiesFlow: Flow<List<SimilarMoviesEntity>> = localDataSource.getSimilarMovies(movieId)
+                val allGenreEntitiesFlow: Flow<List<GenresMovieEntity>> = localDataSource.getGenresMovie()
+
+                // Get genres name
+                return similarMovieEntitiesFlow.combine(allGenreEntitiesFlow) { movieEntities, genreEntities ->
+                    val allGenresDomain: List<GenresMovie> = DataMapper.mapGenreEntitiesToDomain(genreEntities)
+                    movieEntities.toDomain(allGenresDomain)
+                }
+            }
+
+            override fun shouldFetch(data: List<SimilarMovies>?): Boolean =
+                data.isNullOrEmpty() // Set true if want to always fetch from remote API
+
+            override suspend fun createCall(): Flow<ApiResponse<List<ResultsSimilar>>> =
+                remoteDataSource.getSimilarMovies(movieId)
+
+            override suspend fun saveCallResult(data: List<ResultsSimilar>) {
+                val similarMoviesList = DataMapper.mapSimilarMovieResponsesToEntities(movieId, data)
+                localDataSource.insertSimilarMovies(similarMoviesList)
+            }
+        }.asFlow()
 }

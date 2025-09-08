@@ -5,62 +5,63 @@ import com.google.gson.annotations.SerializedName
 data class TrendingMoviesResponse(
 
 	@field:SerializedName("page")
-	val page: Int,
+	val page: Int? = null,
 
 	@field:SerializedName("total_pages")
-	val totalPages: Int,
+	val totalPages: Int? = null,
 
 	@field:SerializedName("results")
-	val resultsTrendingMovies: List<ResultsTrendingMovies>,
+	val resultsTrendingMovies: List<ResultsTrendingMovies> = emptyList(),
 
 	@field:SerializedName("total_results")
-	val totalResults: Int
+	val totalResults: Int? = null
 )
 
 data class ResultsTrendingMovies(
 
 	@field:SerializedName("overview")
-	val overview: String,
+	val overview: String? = null,
 
 	@field:SerializedName("original_language")
-	val originalLanguage: String,
+	val originalLanguage: String? = null,
 
 	@field:SerializedName("original_title")
-	val originalTitle: String,
+	val originalTitle: String? = null,
 
 	@field:SerializedName("video")
-	val video: Boolean,
+	val video: Boolean? = null,
 
 	@field:SerializedName("title")
-	val title: String,
+	val title: String? = null,
 
 	@field:SerializedName("genre_ids")
-	val genreIds: List<Int>,
+	val genreIds: List<Int>? = null,
 
 	@field:SerializedName("poster_path")
-	val posterPath: String,
+	val posterPath: String? = null,
 
 	@field:SerializedName("backdrop_path")
-	val backdropPath: String,
+	val backdropPath: String? = null,
 
 	@field:SerializedName("media_type")
-	val mediaType: String,
+	val mediaType: String? = null,
 
 	@field:SerializedName("release_date")
-	val releaseDate: String,
+	val releaseDate: String? = null,
 
 	@field:SerializedName("popularity")
-	val popularity: Double,
+	val popularity: Double? = null,
 
 	@field:SerializedName("vote_average")
-	val voteAverage: Double,
+	val voteAverage: Double? = null,
 
 	@field:SerializedName("id")
-	val id: Int,
+	val id: Int? = null,
 
 	@field:SerializedName("adult")
-	val adult: Boolean,
+	val adult: Boolean? = null,
 
 	@field:SerializedName("vote_count")
-	val voteCount: Int
+	val voteCount: Int? = null
 )
+

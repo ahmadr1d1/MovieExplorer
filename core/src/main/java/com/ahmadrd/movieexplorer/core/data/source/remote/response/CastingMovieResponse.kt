@@ -5,47 +5,47 @@ import com.google.gson.annotations.SerializedName
 data class CastingMovieResponse(
 
 	@field:SerializedName("cast")
-	val cast: List<CastingItem>,
+	val cast: List<CastingItem> = emptyList(),
 
 	@field:SerializedName("id")
-	val id: Int
+	val id: Int? = null
 )
 
 data class CastingItem(
 
 	@field:SerializedName("cast_id")
-	val castId: Int,
+	val castId: Int? = null,
 
 	@field:SerializedName("character")
-	val character: String,
+	val character: String? = null,
 
 	@field:SerializedName("gender")
-	val gender: Int,
+	val gender: Int? = null,
 
 	@field:SerializedName("credit_id")
-	val creditId: String,
+	val creditId: String? = null,
 
 	@field:SerializedName("known_for_department")
-	val knownForDepartment: String,
+	val knownForDepartment: String? = null,
 
 	@field:SerializedName("original_name")
-	val originalName: String,
+	val originalName: String? = null,
 
 	@field:SerializedName("popularity")
-	val popularity: Double,
+	val popularity: Double? = null,
 
 	@field:SerializedName("name")
-	val name: String,
+	val name: String? = null,
 
 	@field:SerializedName("profile_path")
 	val profilePath: String? = null,
 
 	@field:SerializedName("id")
-	val id: Int,
+	val id: Int? = null,
 
 	@field:SerializedName("adult")
-	val adult: Boolean,
+	val adult: Boolean? = null,
 
 	@field:SerializedName("order")
-	val order: Int
+	val order: Int? = null
 )
