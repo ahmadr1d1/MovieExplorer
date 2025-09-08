@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="110dp"
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical"
@@ -15,7 +15,6 @@
         android:contentDescription="Tom Holland"
         android:scaleType="centerCrop"
         android:src="@drawable/baseline_person_24"
-        android:tint="@color/text_primary"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
 
     <!-- Cast Name -->
@@ -25,7 +24,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:ellipsize="end"
-        android:maxLines="1"
+        android:maxWidth="100dp"
+        android:textAlignment="center"
+        android:maxLines="2"
         android:text="Tom Holland"
         android:textColor="@color/text_primary"
         android:textSize="14sp"
@@ -35,9 +36,11 @@
     <TextView
         android:id="@+id/tv_cast_character"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLines="1"
+        android:layout_height="match_parent"
+        android:ellipsize="middle"
+        android:maxWidth="85dp"
+        android:textAlignment="center"
+        android:maxLines="2"
         android:text="Peter Parker"
         android:textColor="@color/text_secondary"
         android:textSize="12sp" />
