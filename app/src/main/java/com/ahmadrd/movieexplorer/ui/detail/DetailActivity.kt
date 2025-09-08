@@ -128,8 +128,8 @@ class DetailActivity : AppCompatActivity() {
 
                 is Resource.Error -> {
                     showLoading(false)
+                    showError()
                     Log.e("DetailActivity", "State: Error, Message: ${result.message}")
-                    binding.viewErrorDetail.root.visibility = View.VISIBLE
                     binding.viewErrorDetail.tvErrorMessage.text =
                         result.message ?: "Something went wrong"
                 }
@@ -152,7 +152,7 @@ class DetailActivity : AppCompatActivity() {
 
                 is Resource.Error -> {
                     showLoading(false)
-                    binding.viewErrorDetail.root.visibility = View.VISIBLE
+                    showError()
                     binding.viewErrorDetail.tvErrorMessage.text =
                         result.message ?: "Something went wrong"
                 }
@@ -175,7 +175,7 @@ class DetailActivity : AppCompatActivity() {
 
                 is Resource.Error -> {
                     showLoading(false)
-                    binding.viewErrorDetail.root.visibility = View.VISIBLE
+                    showError()
                     binding.viewErrorDetail.tvErrorMessage.text =
                         result.message ?: "Something went wrong"
                 }
@@ -191,6 +191,13 @@ class DetailActivity : AppCompatActivity() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBarDetail.visibility =
             if (isLoading) View.VISIBLE else View.GONE
+        binding.imageStars.visibility =
+            if (isLoading) View.INVISIBLE else View.VISIBLE
+    }
+
+    private fun showError() {
+        binding.viewErrorDetail.root.visibility = View.VISIBLE
+        binding.imageStars.visibility = View.INVISIBLE
     }
 
     companion object {
