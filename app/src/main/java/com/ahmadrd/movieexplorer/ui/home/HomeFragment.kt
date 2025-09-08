@@ -48,10 +48,10 @@ class HomeFragment : Fragment() {
 
         with(binding) {
             etSearch.setOnClickListener {
-                showToast()
+                showToastFeatureNotAvailable()
             }
             btnSwitchGenreMovies.setOnClickListener {
-                showToast()
+                showToastFeatureNotAvailable()
             }
         }
     }
@@ -84,6 +84,12 @@ class HomeFragment : Fragment() {
     private fun observePopularMovies() {
         if (activity != null) {
 
+            popularMoviesAdapter.onItemClick = { clickedMovie ->
+                val intent = Intent(activity, DetailActivity::class.java)
+                intent.putExtra(DetailActivity.EXTRA_MOVIE_ID, clickedMovie.id)
+                startActivity(intent)
+            }
+
             homeViewModel.popularMovies.observe(viewLifecycleOwner) { popularMovies ->
                 if (popularMovies != null) {
                     when (popularMovies) {
@@ -91,15 +97,6 @@ class HomeFragment : Fragment() {
                         is Resource.Success -> {
                             showLoading(false)
                             popularMoviesAdapter.submitList(popularMovies.data)
-
-                            popularMoviesAdapter.onItemClick = {
-                                val intent = Intent(activity, DetailActivity::class.java)
-                                intent.putExtra(
-                                    DetailActivity.EXTRA_MOVIE_ID,
-                                    popularMovies.data?.get(0)?.id
-                                )
-                                startActivity(intent)
-                            }
                         }
 
                         is Resource.Error -> {
@@ -116,6 +113,11 @@ class HomeFragment : Fragment() {
 
     private fun observeTrendingMovies() {
         if (activity != null) {
+            trendingMoviesAdapter.onItemClick = { clickedMovie ->
+                val intent = Intent(activity, DetailActivity::class.java)
+                intent.putExtra(DetailActivity.EXTRA_MOVIE_ID, clickedMovie.id)
+                startActivity(intent)
+            }
 
             homeViewModel.trendingMovies.observe(viewLifecycleOwner) { trendingMovies ->
                 if (trendingMovies != null) {
@@ -124,15 +126,6 @@ class HomeFragment : Fragment() {
                         is Resource.Success -> {
                             showLoading(false)
                             trendingMoviesAdapter.submitList(trendingMovies.data)
-
-                            trendingMoviesAdapter.onItemClick = {
-                                val intent = Intent(activity, DetailActivity::class.java)
-                                intent.putExtra(
-                                    DetailActivity.EXTRA_MOVIE_ID,
-                                    trendingMovies.data?.get(0)?.id
-                                )
-                                startActivity(intent)
-                            }
                         }
 
                         is Resource.Error -> {
@@ -150,8 +143,8 @@ class HomeFragment : Fragment() {
     private fun observeGenresMovie() {
         if (activity != null) {
 
-            genresMovieAdapter.onItemClick = { selectedData ->
-                showToast()
+            genresMovieAdapter.onItemClick = {
+                showToastFeatureNotAvailable()
             }
 
             homeViewModel.genresMovie.observe(viewLifecycleOwner) { genresMovie ->
@@ -179,7 +172,7 @@ class HomeFragment : Fragment() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun showToast() {
+    private fun showToastFeatureNotAvailable() {
         Toast.makeText(
             context,
             "This feature is not available yet",
