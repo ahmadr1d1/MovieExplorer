@@ -116,9 +116,6 @@ class HomeFragment : Fragment() {
 
     private fun observeTrendingMovies() {
         if (activity != null) {
-//            trendingMoviesAdapter.onItemClick = { selectedData ->
-//                showToast()
-//            }
 
             homeViewModel.trendingMovies.observe(viewLifecycleOwner) { trendingMovies ->
                 if (trendingMovies != null) {
@@ -127,6 +124,15 @@ class HomeFragment : Fragment() {
                         is Resource.Success -> {
                             showLoading(false)
                             trendingMoviesAdapter.submitList(trendingMovies.data)
+
+                            trendingMoviesAdapter.onItemClick = {
+                                val intent = Intent(activity, DetailActivity::class.java)
+                                intent.putExtra(
+                                    DetailActivity.EXTRA_MOVIE_ID,
+                                    trendingMovies.data?.get(0)?.id
+                                )
+                                startActivity(intent)
+                            }
                         }
 
                         is Resource.Error -> {

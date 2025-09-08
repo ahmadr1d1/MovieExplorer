@@ -3,6 +3,10 @@ package com.ahmadrd.movieexplorer
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +21,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private var doubleBackToExitPressedOnce = false
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,5 +48,21 @@ class MainActivity : AppCompatActivity() {
                 ?: throw IllegalStateException("NavHostFragment not found")
         val navController = navHostFragment.navController
         navView.setupWithNavController(navController)
+
+        onBackPressedDispatcher.addCallback(this,
+            object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (doubleBackToExitPressedOnce) {
+                    finish()
+                    return
+                }
+
+                doubleBackToExitPressedOnce = true
+                Toast.makeText(this@MainActivity,
+                    R.string.one_more, Toast.LENGTH_SHORT).show()
+
+                handler.postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+            }
+        })
     }
 }
