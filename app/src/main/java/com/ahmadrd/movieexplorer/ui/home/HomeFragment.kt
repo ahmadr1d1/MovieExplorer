@@ -48,10 +48,10 @@ class HomeFragment : Fragment() {
 
         with(binding) {
             etSearch.setOnClickListener {
-                showToastFeatureNotAvailable()
+                showToast("This feature is not available yet")
             }
             btnSwitchGenreMovies.setOnClickListener {
-                showToastFeatureNotAvailable()
+                showToast("This feature is not available yet")
             }
         }
     }
@@ -144,7 +144,7 @@ class HomeFragment : Fragment() {
         if (activity != null) {
 
             genresMovieAdapter.onItemClick = {
-                showToastFeatureNotAvailable()
+                showToast("This feature is not available yet")
             }
 
             homeViewModel.genresMovie.observe(viewLifecycleOwner) { genresMovie ->
@@ -172,10 +172,10 @@ class HomeFragment : Fragment() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun showToastFeatureNotAvailable() {
+    private fun showToast(message: String) {
         Toast.makeText(
             context,
-            "This feature is not available yet",
+            message,
             Toast.LENGTH_SHORT
         )
             .show()

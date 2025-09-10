@@ -1,5 +1,6 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -84,6 +85,8 @@
                 android:text="@string/popular_movies_release_date"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="?android:attr/textColorSecondary"
+                app:drawableStartCompat="@drawable/releasedate"
+                app:drawableTint="@color/text_secondary"
                 tools:text="2014" />
 
             <!-- Genre tag -->
