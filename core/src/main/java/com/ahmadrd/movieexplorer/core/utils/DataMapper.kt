@@ -21,6 +21,9 @@ import com.ahmadrd.movieexplorer.core.domain.model.GenresMovie
 import com.ahmadrd.movieexplorer.core.domain.model.PopularMovies
 import com.ahmadrd.movieexplorer.core.domain.model.SimilarMovies
 import com.ahmadrd.movieexplorer.core.domain.model.TrendingMovies
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 object DataMapper {
 
@@ -370,4 +373,23 @@ object DataMapper {
         runtime = runtime,
         dateAdded = dateAdded
     )
+
+    // Convert DetailMovie (domain) to AllMovie (domain) for favoriting
+    fun DetailMovie.toAllMovie(): AllMovie? {
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val currentDate = sdf.format(Date())
+        return AllMovie(
+            id = this.id,
+            overview = this.overview,
+            originalLanguage = this.originalLanguage,
+            title = this.title,
+            genreIds = this.genres?.mapNotNull { it.id },
+            genreNames = this.genres?.mapNotNull { it.name },
+            posterPath = this.posterPath,
+            releaseDate = this.releaseDate,
+            voteAverage = this.voteAverage,
+            runtime = this.runtime,
+            dateAdded = currentDate
+        )
+    }
 }
