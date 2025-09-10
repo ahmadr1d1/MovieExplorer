@@ -1,4 +1,4 @@
-package com.ahmadrd.movieexplorer.core.utils
+package com.ahmadrd.movieexplorer.core.utils.database
 
 import androidx.room.TypeConverter
 import com.ahmadrd.movieexplorer.core.data.source.remote.response.GenresItem

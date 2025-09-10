@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ahmadrd.movieexplorer.core.R
 import com.ahmadrd.movieexplorer.core.databinding.ItemPopularMoviesBinding
 import com.ahmadrd.movieexplorer.core.domain.model.PopularMovies
+import com.ahmadrd.movieexplorer.core.utils.FormatTime
 import com.ahmadrd.movieexplorer.core.utils.TMDBImage
 import com.bumptech.glide.Glide
 import kotlin.math.round
@@ -39,7 +40,7 @@ class ListPopularMoviesAdapter :
                 .error(R.drawable.baseline_broken_image_24)
                 .into(binding.popularMoviesImage)
             binding.popularMoviesTitle.text = data.title
-            binding.popularMoviesReleaseDate.text = data.releaseDate
+            binding.popularMoviesReleaseDate.text = FormatTime.formatRelativeTimeFromDate(data.releaseDate)
             binding.ratingPopularMovies.text = formatRating(data.voteAverage ?: -0.0)
             binding.genrePopularMovies.text = data.genreNames?.joinToString(", ")
         }

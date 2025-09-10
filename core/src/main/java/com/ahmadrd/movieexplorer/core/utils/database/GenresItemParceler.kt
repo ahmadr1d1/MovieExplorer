@@ -1,4 +1,4 @@
-package com.ahmadrd.movieexplorer.core.utils
+package com.ahmadrd.movieexplorer.core.utils.database
 
 import android.os.Parcel
 import com.ahmadrd.movieexplorer.core.data.source.remote.response.GenresItem

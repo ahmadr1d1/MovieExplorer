@@ -47,7 +47,5 @@ data class PopularMoviesEntity(
     val adult: Boolean? = null,
 
     @ColumnInfo(name = "voteCount")
-    val voteCount: Int? = null,
-
-    var isFavorite: Boolean = false
+    val voteCount: Int? = null
 )

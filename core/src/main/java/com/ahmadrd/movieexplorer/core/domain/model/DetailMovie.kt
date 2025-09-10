@@ -2,7 +2,7 @@ package com.ahmadrd.movieexplorer.core.domain.model
 
 import android.os.Parcelable
 import com.ahmadrd.movieexplorer.core.data.source.remote.response.GenresItem
-import com.ahmadrd.movieexplorer.core.utils.GenresItemParceler
+import com.ahmadrd.movieexplorer.core.utils.database.GenresItemParceler
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.TypeParceler
 
@@ -15,7 +15,7 @@ data class DetailMovie(
     val title: String? = null,
     val backdropPath: String? = null,
     val revenue: Int? = null,
-    val genres: List<GenresItem>?,
+    val genres: List<GenresItem>? = null,
     val popularity: Double? = null,
     val id: Int,
     val voteCount: Int? = null,

@@ -51,7 +51,5 @@ data class TrendingMoviesEntity(
     val adult: Boolean? = null,
 
     @ColumnInfo(name = "vote_count")
-    val voteCount: Int? = null,
-
-    var isFavorite: Boolean = false
+    val voteCount: Int? = null
 )

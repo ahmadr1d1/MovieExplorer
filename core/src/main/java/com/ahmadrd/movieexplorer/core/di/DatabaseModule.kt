@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.ahmadrd.movieexplorer.core.data.source.local.room.CastingMovieDao
 import com.ahmadrd.movieexplorer.core.data.source.local.room.DetailMovieDao
+import com.ahmadrd.movieexplorer.core.data.source.local.room.FavoriteDao
 import com.ahmadrd.movieexplorer.core.data.source.local.room.GenresMovieDao
 import com.ahmadrd.movieexplorer.core.data.source.local.room.MoviesDatabase
 import com.ahmadrd.movieexplorer.core.data.source.local.room.PopularMoviesDao
@@ -57,5 +58,10 @@ class DatabaseModule {
     @Provides
     fun provideSimilarMoviesDao(database: MoviesDatabase): SimilarMoviesDao =
         database.similarMoviesDao()
+
+    @Singleton
+    @Provides
+    fun provideFavoriteDao(database: MoviesDatabase): FavoriteDao =
+        database.favoriteDao()
 
 }

@@ -2,16 +2,20 @@ package com.ahmadrd.movieexplorer.core.data.source.local
 
 import com.ahmadrd.movieexplorer.core.data.source.local.entity.CastingMovieEntity
 import com.ahmadrd.movieexplorer.core.data.source.local.entity.DetailMovieEntity
+import com.ahmadrd.movieexplorer.core.data.source.local.entity.FavoriteEntity
 import com.ahmadrd.movieexplorer.core.data.source.local.entity.GenresMovieEntity
 import com.ahmadrd.movieexplorer.core.data.source.local.entity.PopularMoviesEntity
 import com.ahmadrd.movieexplorer.core.data.source.local.entity.SimilarMoviesEntity
 import com.ahmadrd.movieexplorer.core.data.source.local.entity.TrendingMoviesEntity
 import com.ahmadrd.movieexplorer.core.data.source.local.room.CastingMovieDao
 import com.ahmadrd.movieexplorer.core.data.source.local.room.DetailMovieDao
+import com.ahmadrd.movieexplorer.core.data.source.local.room.FavoriteDao
 import com.ahmadrd.movieexplorer.core.data.source.local.room.GenresMovieDao
 import com.ahmadrd.movieexplorer.core.data.source.local.room.PopularMoviesDao
 import com.ahmadrd.movieexplorer.core.data.source.local.room.SimilarMoviesDao
 import com.ahmadrd.movieexplorer.core.data.source.local.room.TrendingMoviesDao
+import com.ahmadrd.movieexplorer.core.domain.model.AllMovie
+import com.ahmadrd.movieexplorer.core.utils.DataMapper.favoriteToEntity
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -23,44 +27,32 @@ class LocalDataSource @Inject constructor(
     private val genresMovieDao: GenresMovieDao,
     private val detailMovieDao: DetailMovieDao,
     private val castingMovieDao: CastingMovieDao,
-    private val similarMoviesDao: SimilarMoviesDao
+    private val similarMoviesDao: SimilarMoviesDao,
+    private val favoriteDao: FavoriteDao
 ) {
 
     // Popular Movies
     fun getPopularMovies(): Flow<List<PopularMoviesEntity>> =
         popularMoviesDao.getPopularMovies()
 
-    fun getFavoritePopularMovies(): Flow<List<PopularMoviesEntity>> =
-        popularMoviesDao.getFavoritePopularMovies()
-
     suspend fun insertPopularMovies(popularMoviesList: List<PopularMoviesEntity>) =
         popularMoviesDao.insertPopularMovies(popularMoviesList)
 
-    fun updateFavoritePopularMovies(movies: PopularMoviesEntity, newState: Boolean) {
-        movies.isFavorite = newState
-        popularMoviesDao.updateFavoritePopularMovies(movies)
-    }
 
     // Trending Movies
     fun getTrendingMovies(): Flow<List<TrendingMoviesEntity>> =
         trendingMoviesDao.getTrendingMovies()
 
-    fun getFavoriteTrendingMovies(): Flow<List<TrendingMoviesEntity>> =
-        trendingMoviesDao.getFavoriteTrendingMovies()
-
     suspend fun insertTrendingMovies(trendingMoviesList: List<TrendingMoviesEntity>) =
         trendingMoviesDao.insertTrendingMovies(trendingMoviesList)
 
-    fun updateFavoriteTrendingMovies(trendingMovies: TrendingMoviesEntity, newState: Boolean) {
-        trendingMovies.isFavorite = newState
-        trendingMoviesDao.updateTrendingMovies(trendingMovies)
-    }
 
     // Genres Movie
     fun getGenresMovie(): Flow<List<GenresMovieEntity>> = genresMovieDao.getGenresMovie()
 
     suspend fun insertGenresMovie(genres: List<GenresMovieEntity>) =
         genresMovieDao.insertGenresMovie(genres)
+
 
     // Detail Movie
     fun getDetailMovie(movieId: Int): Flow<DetailMovieEntity?> =
@@ -69,6 +61,7 @@ class LocalDataSource @Inject constructor(
     suspend fun insertDetailMovie(movie: DetailMovieEntity) =
         detailMovieDao.insertDetailMovie(movie)
 
+
     // Casting Movie
     fun getCastingMovie(movieId: Int): Flow<List<CastingMovieEntity>> =
         castingMovieDao.getCastingMovie(movieId)
@@ -76,11 +69,30 @@ class LocalDataSource @Inject constructor(
     suspend fun insertCastingMovie(cast: List<CastingMovieEntity>) =
         castingMovieDao.insertCastingMovie(cast)
 
+
     // Similar Movies
     fun getSimilarMovies(movieId: Int): Flow<List<SimilarMoviesEntity>> =
         similarMoviesDao.getSimilarMovies(movieId)
 
     suspend fun insertSimilarMovies(movies: List<SimilarMoviesEntity>) =
         similarMoviesDao.insertSimilarMovies(movies)
+
+
+    // Favorites
+    fun getFavorites(): Flow<List<FavoriteEntity>> = favoriteDao.getFavorites()
+
+    fun getFavoriteById(id: Int): Flow<FavoriteEntity?> = favoriteDao.getFavoriteById(id)
+
+    suspend fun insertFavorite(movie: FavoriteEntity) = favoriteDao.insert(movie)
+
+    suspend fun deleteFavorite(movie: FavoriteEntity) = favoriteDao.delete(movie)
+
+    suspend fun removeFavoriteMovie(movie: AllMovie) { // Tetap menerima AllMovie (domain model)
+        // 1. Anda PERLU mengkonversi/memetakan objek AllMovie ke FavoriteMovieEntity
+        val favoriteEntityToDelete = movie.favoriteToEntity() // Atau logika mapping lainnya
+
+        // 2. Kemudian baru panggil fungsi DAO dengan entity yang sudah dikonversi
+        favoriteDao.delete(favoriteEntityToDelete)
+    }
 
 }
