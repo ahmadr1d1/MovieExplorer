@@ -37,25 +37,25 @@
                 app:iconPadding="0dp"
                 app:iconSize="24dp"
                 app:iconTint="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <!-- Title Text -->
             <TextView
                 android:id="@+id/tv_header_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/archivo_bold"
                 android:text="Detail Movie"
+                android:textColor="@color/text_primary"
                 android:textSize="36sp"
                 android:textStyle="bold"
-                android:fontFamily="@font/archivo_bold"
-                android:textColor="@color/text_primary"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/btn_back"
                 app:layout_constraintEnd_toStartOf="@id/fab_favorite"
-                app:layout_constraintHorizontal_bias="0.5" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/btn_back"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <!-- Favorite Button (FAB Style) -->
             <com.google.android.material.button.MaterialButton
@@ -73,7 +73,6 @@
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
                 app:iconSize="24dp"
-                app:iconTint="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -81,7 +80,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
-
 
 
     <!-- Main Content -->
@@ -143,8 +141,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
-                            android:textSize="18sp"
                             android:textColor="@color/text_primary"
+                            android:textSize="18sp"
                             android:textStyle="bold"
                             tools:text="Spider-Man: No Way Home" />
 
@@ -152,18 +150,18 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginBottom="8dp">
+                            android:layout_marginBottom="8dp"
+                            android:orientation="horizontal">
 
                             <!-- Container untuk star + rating -->
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:paddingRight="8dp"
-                                android:paddingVertical="4dp"
                                 android:background="@drawable/bg_rating"
-                                android:gravity="center_vertical">
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingVertical="4dp"
+                                android:paddingEnd="8dp">
 
                                 <ImageView
                                     android:id="@+id/image_stars"
@@ -171,28 +169,41 @@
                                     android:layout_height="wrap_content"
                                     android:src="@drawable/baseline_star_24" />
 
-                            <TextView
-                                android:id="@+id/rating_detail"
+                                <TextView
+                                    android:id="@+id/rating_detail"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingStart="4dp"
+                                    android:textColor="@color/star"
+                                    android:textStyle="bold"
+                                    tools:text="8.4" />
+                            </LinearLayout>
+
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                tools:text="8.4"
-                                android:textColor="@color/star"
-                                android:textStyle="bold"
-                                android:paddingStart="4dp" />
-                        </LinearLayout>
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingVertical="4dp"
+                                android:paddingStart="8dp">
 
-                        <TextView
-                            android:id="@+id/tv_release_year"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:gravity="center_vertical"
-                            android:paddingHorizontal="8dp"
-                            android:paddingVertical="4dp"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            tools:text="2021" />
-                    </LinearLayout>
+                                <ImageView
+                                    android:id="@+id/image_release_date"
+                                    android:layout_width="16dp"
+                                    android:layout_height="wrap_content"
+                                    app:tint="@color/text_secondary"
+                                    android:src="@drawable/releasedate" />
+
+                                <TextView
+                                    android:id="@+id/tv_release_year"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/text_secondary"
+                                    android:paddingStart="4dp"
+                                    tools:text="20 November 2021" />
+
+                            </LinearLayout>
+                        </LinearLayout>
 
                         <!-- Genre tag -->
                         <TextView
@@ -201,8 +212,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
                             android:paddingVertical="4dp"
-                            android:textSize="12sp"
                             android:textColor="@android:color/holo_blue_dark"
+                            android:textSize="12sp"
                             tools:text="Action" />
 
                         <!-- Duration and Language -->
@@ -216,10 +227,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:drawablePadding="4dp"
-                                app:drawableTint="@color/text_secondary"
                                 android:textColor="@color/text_secondary"
                                 android:textSize="12sp"
                                 app:drawableStartCompat="@drawable/baseline_access_time_16"
+                                app:drawableTint="@color/text_secondary"
                                 tools:text="148 min" />
 
                             <TextView

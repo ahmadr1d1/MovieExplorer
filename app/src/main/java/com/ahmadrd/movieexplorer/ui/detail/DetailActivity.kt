@@ -1,5 +1,6 @@
 package com.ahmadrd.movieexplorer.ui.detail
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -7,28 +8,31 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ahmadrd.movieexplorer.R
 import com.ahmadrd.movieexplorer.core.data.Resource
+import com.ahmadrd.movieexplorer.core.domain.model.AllMovie
+import com.ahmadrd.movieexplorer.core.domain.model.DetailMovie
 import com.ahmadrd.movieexplorer.core.ui.ListCastingMovieAdapter
 import com.ahmadrd.movieexplorer.core.ui.ListSimilarMoviesAdapter
+import com.ahmadrd.movieexplorer.core.utils.DataMapper.toAllMovie
+import com.ahmadrd.movieexplorer.core.utils.FormatTime
 import com.ahmadrd.movieexplorer.core.utils.TMDBImage
 import com.ahmadrd.movieexplorer.databinding.ActivityDetailBinding
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import com.ahmadrd.movieexplorer.core.R.color
 import kotlin.math.round
 
 @AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
 
     private val viewModel: DetailViewModel by viewModels()
-
     private lateinit var binding: ActivityDetailBinding
-
     private val castingAdapter = ListCastingMovieAdapter()
-
     private val similarMoviesAdapter = ListSimilarMoviesAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,47 +51,65 @@ class DetailActivity : AppCompatActivity() {
             finish()
         }
 
-        // Get movieId from Intent
         val movieId = intent.getIntExtra(EXTRA_MOVIE_ID, -1)
-        if (movieId == -1) {
+        Log.i("DetailActivity", "Movie id received: $movieId")
+        if (movieId == -1 || movieId == 0) { // Check for invalid IDs
             Toast.makeText(
                 this,
-                "Movie id is not found",
+                "Movie ID is not found or invalid",
                 Toast.LENGTH_SHORT
             ).show()
             finish()
             return
         }
-
-        // Set id to viewModel, it will trigger fetch via switchMap
         viewModel.setMovieId(movieId)
 
         observeDetailMovie()
         observeCasting()
         observeSimilarMovies()
+        observeFavoriteStatus()
     }
 
     private fun setupRecyclerView() {
-
-        // Casting Movie
         with(binding.rvCast) {
             adapter = castingAdapter
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(
-                this@DetailActivity,
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
+            layoutManager =
+                LinearLayoutManager(this@DetailActivity, LinearLayoutManager.HORIZONTAL, false)
         }
-
-        // Similar Movies
         with(binding.rvSimilarMovies) {
             adapter = similarMoviesAdapter
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(
-                this@DetailActivity,
-                LinearLayoutManager.HORIZONTAL,
-                false
+            layoutManager =
+                LinearLayoutManager(this@DetailActivity, LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
+
+    private fun observeFavoriteStatus() {
+        // Observer untuk status favorit (hanya update UI)
+        viewModel.isFavorite.observe(this) { isFav ->
+            Log.i("DetailActivity", "Favorite status changed: $isFav")
+            updateFavoriteUI(isFav)
+        }
+
+        // Observer untuk toast message
+        viewModel.toastMessage.observe(this) { message ->
+            message?.let {
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                // Clear message after showing up
+                viewModel.clearToastMessage()
+            }
+        }
+    }
+
+    private fun updateFavoriteUI(isFavorite: Boolean) {
+        if (isFavorite) {
+            binding.fabFavorite.iconTint = ColorStateList.valueOf(
+                ContextCompat.getColor(this, color.movie_red)
+            )
+        } else {
+            binding.fabFavorite.iconTint = ColorStateList.valueOf(
+                ContextCompat.getColor(this, color.movie_white)
             )
         }
     }
@@ -95,66 +117,74 @@ class DetailActivity : AppCompatActivity() {
     private fun observeDetailMovie() {
         viewModel.detailMovie.observe(this) { result ->
             when (result) {
-                is Resource.Loading -> {
-                    showLoading(true)
-                }
-
+                is Resource.Loading -> showLoading(true)
                 is Resource.Success -> {
                     showLoading(false)
-                    val data = result.data
-                    if (data != null) {
-                        with(binding) {
-                            Glide.with(this@DetailActivity)
-                                .load(TMDBImage.BASE_IMAGE_URL + data.posterPath)
-                                .error(com.ahmadrd.movieexplorer.core.R.drawable.baseline_broken_image_24)
-                                .into(binding.ivPoster)
-                            tvMovieTitle.text = data.title
-                            tvReleaseYear.text = data.releaseDate
-                            tvDuration.text = data.runtime.toString()
-                            tvOverview.text = data.overview
-                            tvLanguage.text = data.originalLanguage
-                            genreDetailMovie.text = data.genres?.joinToString { it.name ?: "empty" }
-                            ratingDetail.text = formatRating(data.voteAverage)
-                        }
+                    result.data?.let { detailMovie ->
+                        populateDetailMovieUi(detailMovie)
                         setupRecyclerView()
-                    } else {
-                        Toast.makeText(
-                            this,
-                            "Data is null",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        // Set OnClickListener for fabFavorite here, ensuring detailMovie is available
+                        binding.fabFavorite.setOnClickListener {
+                            val allMovie = detailMovie.toAllMovie()
+                            if (allMovie != null) {
+                                viewModel.toggleFavorite(allMovie)
+                            } else {
+                                Toast.makeText(
+                                    this,
+                                    "Cannot favorite: Movie data is invalid",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                Log.w(
+                                    "DetailActivity",
+                                    "Attempted to favorite movie with invalid ID: ${detailMovie.id} - ${detailMovie.title}"
+                                )
+                            }
+                        }
+                    } ?: run {
+                        showLoading(false)
+                        showError("Detail data is null")
+                        Log.e("DetailActivity", "State: Success, but data is null")
                     }
                 }
 
                 is Resource.Error -> {
                     showLoading(false)
-                    showError()
+                    showError(result.message)
                     Log.e("DetailActivity", "State: Error, Message: ${result.message}")
-                    binding.viewErrorDetail.tvErrorMessage.text =
-                        result.message ?: "Something went wrong"
                 }
             }
+        }
+    }
+
+    private fun populateDetailMovieUi(data: DetailMovie) {
+        with(binding) {
+            Glide.with(this@DetailActivity)
+                .load(TMDBImage.BASE_IMAGE_URL + data.posterPath)
+                .error(com.ahmadrd.movieexplorer.core.R.drawable.baseline_broken_image_24)
+                .into(ivPoster)
+            tvMovieTitle.text = data.title
+            tvReleaseYear.text = FormatTime.formatRelativeTimeFromDate(data.releaseDate)
+            tvDuration.text = data.runtime.toString()
+            tvOverview.text = data.overview
+            tvLanguage.text = data.originalLanguage
+            genreDetailMovie.text = data.genres?.joinToString { it.name ?: "empty" }
+            ratingDetail.text = formatRating(data.voteAverage)
         }
     }
 
     private fun observeCasting() {
         viewModel.castingMovie.observe(this) { result ->
             when (result) {
-                is Resource.Loading -> {
-                    showLoading(true)
-                }
-
+                is Resource.Loading -> showLoading(true) // Consider separate loading for casting
                 is Resource.Success -> {
-                    showLoading(false)
-                    val data = result.data.orEmpty()
-                    castingAdapter.submitList(data)
+                    showLoading(false) // Or adjust based on overall loading strategy
+                    castingAdapter.submitList(result.data.orEmpty())
                 }
 
                 is Resource.Error -> {
                     showLoading(false)
-                    showError()
-                    binding.viewErrorDetail.tvErrorMessage.text =
-                        result.message ?: "Something went wrong"
+                    // showError(result.message) // Consider specific error handling for casting
+                    Log.e("DetailActivity", "Casting Error: ${result.message}")
                 }
             }
         }
@@ -163,21 +193,16 @@ class DetailActivity : AppCompatActivity() {
     private fun observeSimilarMovies() {
         viewModel.similarMovies.observe(this) { result ->
             when (result) {
-                is Resource.Loading -> {
-                    showLoading(true)
-                }
-
+                is Resource.Loading -> showLoading(true) // Consider separate loading for similar movies
                 is Resource.Success -> {
-                    showLoading(false)
-                    val data = result.data.orEmpty()
-                    similarMoviesAdapter.submitList(data)
+                    showLoading(false) // Or adjust based on overall loading strategy
+                    similarMoviesAdapter.submitList(result.data.orEmpty())
                 }
 
                 is Resource.Error -> {
                     showLoading(false)
-                    showError()
-                    binding.viewErrorDetail.tvErrorMessage.text =
-                        result.message ?: "Something went wrong"
+                    // showError(result.message) // Consider specific error handling for similar movies
+                    Log.e("DetailActivity", "Similar Movies Error: ${result.message}")
                 }
             }
         }
@@ -189,15 +214,17 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.progressBarDetail.visibility =
-            if (isLoading) View.VISIBLE else View.GONE
-        binding.imageStars.visibility =
-            if (isLoading) View.INVISIBLE else View.VISIBLE
+        binding.progressBarDetail.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.imageStars.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
+        if (isLoading) binding.viewErrorDetail.root.visibility = View.GONE
+
     }
 
-    private fun showError() {
+    private fun showError(message: String?) {
         binding.viewErrorDetail.root.visibility = View.VISIBLE
-        binding.imageStars.visibility = View.INVISIBLE
+        binding.viewErrorDetail.tvErrorMessage.text = message ?: "Something went wrong"
+        binding.imageStars.visibility = View.INVISIBLE // Hide stars on error
+        binding.progressBarDetail.visibility = View.GONE
     }
 
     companion object {
