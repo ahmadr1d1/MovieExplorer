@@ -21,6 +21,5 @@ data class TrendingMovies(
     val voteAverage: Double? = null,
     val adult: Boolean? = null,
     val voteCount: Int? = null,
-    val genreNames: List<String>? = null,
-    var isFavorite: Boolean = false
+    val genreNames: List<String>? = null
 ) : Parcelable

@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.android.dynamic.feature)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
-//    alias(libs.plugins.hiltAndroid)
+//    alias(libs.plugins.hiltAndroid) // <- Penyebab error, karena jika baris ini di komen, error build hilang
 }
 android {
     namespace = "com.ahmadrd.movieexplorer.favorite"
@@ -25,12 +25,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlin {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+            jvmTarget.set(JvmTarget.JVM_17)
         }
     }
     buildFeatures {

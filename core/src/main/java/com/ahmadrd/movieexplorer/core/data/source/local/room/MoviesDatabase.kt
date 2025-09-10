@@ -5,19 +5,21 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.ahmadrd.movieexplorer.core.data.source.local.entity.CastingMovieEntity
 import com.ahmadrd.movieexplorer.core.data.source.local.entity.DetailMovieEntity
+import com.ahmadrd.movieexplorer.core.data.source.local.entity.FavoriteEntity
 import com.ahmadrd.movieexplorer.core.data.source.local.entity.GenresMovieEntity
 import com.ahmadrd.movieexplorer.core.data.source.local.entity.PopularMoviesEntity
 import com.ahmadrd.movieexplorer.core.data.source.local.entity.SimilarMoviesEntity
 import com.ahmadrd.movieexplorer.core.data.source.local.entity.TrendingMoviesEntity
-import com.ahmadrd.movieexplorer.core.utils.Converters
+import com.ahmadrd.movieexplorer.core.utils.database.Converters
 
 @Database(entities = [PopularMoviesEntity::class,
     TrendingMoviesEntity::class,
     GenresMovieEntity::class,
     DetailMovieEntity::class,
     CastingMovieEntity::class,
-    SimilarMoviesEntity::class],
-    version = 10,
+    SimilarMoviesEntity::class,
+    FavoriteEntity::class],
+    version = 12,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -34,5 +36,7 @@ abstract class MoviesDatabase : RoomDatabase() {
     abstract fun castingMovieDao(): CastingMovieDao
 
     abstract fun similarMoviesDao(): SimilarMoviesDao
+
+    abstract fun favoriteDao(): FavoriteDao
 
 }

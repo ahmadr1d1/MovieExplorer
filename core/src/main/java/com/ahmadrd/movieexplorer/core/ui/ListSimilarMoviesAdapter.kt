@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ahmadrd.movieexplorer.core.R
 import com.ahmadrd.movieexplorer.core.databinding.ItemSimilarMovieBinding
 import com.ahmadrd.movieexplorer.core.domain.model.SimilarMovies
+import com.ahmadrd.movieexplorer.core.utils.FormatTime
 import com.ahmadrd.movieexplorer.core.utils.TMDBImage
 import com.bumptech.glide.Glide
 import kotlin.math.round
@@ -39,7 +40,7 @@ class ListSimilarMoviesAdapter :
                 .error(R.drawable.baseline_broken_image_24)
                 .into(binding.similarMoviesImage)
             binding.similarMoviesTitle.text = data.title
-            binding.similarMoviesReleaseDate.text = data.releaseDate
+            binding.similarMoviesReleaseDate.text = FormatTime.formatRelativeTimeFromDate(data.releaseDate)
             binding.ratingSimilarMovies.text = formatRating(data.voteAverage ?: -0.0)
             binding.genreSimilarMovies.text = data.genreNames?.joinToString(", ")
         }

@@ -1,6 +1,7 @@
 package com.ahmadrd.movieexplorer.core.domain.usecase
 
 import com.ahmadrd.movieexplorer.core.data.Resource
+import com.ahmadrd.movieexplorer.core.domain.model.AllMovie
 import com.ahmadrd.movieexplorer.core.domain.model.CastingMovie
 import com.ahmadrd.movieexplorer.core.domain.model.DetailMovie
 import com.ahmadrd.movieexplorer.core.domain.model.GenresMovie
@@ -13,13 +14,9 @@ interface MoviesUseCase {
 
     // Popular Movies
     fun getPopularMovies(): Flow<Resource<List<PopularMovies>>>
-    fun getFavoritePopularMovies(): Flow<List<PopularMovies>>
-    fun setFavoriteMovies(popularMovies: PopularMovies, state: Boolean)
 
     // Trending Movies (day)
     fun getTrendingMovies(): Flow<Resource<List<TrendingMovies>>>
-    fun getFavoriteTrendingMovies(): Flow<List<TrendingMovies>>
-    fun setFavoriteTrendingMovies(trendingMovies: TrendingMovies, state: Boolean)
 
     // Genres Movie
     fun getGenresMovie(): Flow<Resource<List<GenresMovie>>>
@@ -32,5 +29,11 @@ interface MoviesUseCase {
 
     // Similar Movie
     fun getSimilarMovies(movieId: Int): Flow<Resource<List<SimilarMovies>>>
+
+    // Favorites Movie
+    fun getFavorites(): Flow<List<AllMovie>>
+    suspend fun setFavorite(allMovie: AllMovie, favorite: Boolean)
+    suspend fun removeFavorite(movie: AllMovie)
+    fun isFavorite(movieId: Int): Flow<Boolean>
 
 }

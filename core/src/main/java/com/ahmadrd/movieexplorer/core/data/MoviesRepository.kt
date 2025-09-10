@@ -8,8 +8,9 @@ import com.ahmadrd.movieexplorer.core.data.source.remote.network.ApiResponse
 import com.ahmadrd.movieexplorer.core.data.source.remote.response.*
 import com.ahmadrd.movieexplorer.core.domain.model.*
 import com.ahmadrd.movieexplorer.core.domain.repository.IMoviesRepository
-import com.ahmadrd.movieexplorer.core.utils.AppExecutors
 import com.ahmadrd.movieexplorer.core.utils.DataMapper
+import com.ahmadrd.movieexplorer.core.utils.DataMapper.favoriteToDomain
+import com.ahmadrd.movieexplorer.core.utils.DataMapper.favoriteToEntity
 import com.ahmadrd.movieexplorer.core.utils.DataMapper.toDomain
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -20,10 +21,10 @@ import javax.inject.Singleton
 @Singleton
 class MoviesRepository @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
-    private val localDataSource: LocalDataSource,
-    private val appExecutors: AppExecutors
+    private val localDataSource: LocalDataSource
 ) : IMoviesRepository {
 
+    // Popular Movies
     override fun getPopularMovies(): Flow<Resource<List<PopularMovies>>> =
         object : NetworkBoundResource<List<PopularMovies>, List<ResultsItem>>() {
             override fun loadFromDB(): Flow<List<PopularMovies>> {
@@ -49,28 +50,8 @@ class MoviesRepository @Inject constructor(
             }
         }.asFlow()
 
-    override fun getFavoritePopularMovies(): Flow<List<PopularMovies>> {
-        val favoriteMovieEntitiesFlow = localDataSource.getFavoritePopularMovies()
-        val allGenreEntitiesFlow = localDataSource.getGenresMovie()
 
-        return favoriteMovieEntitiesFlow.combine(allGenreEntitiesFlow) { movieEntities, genreEntities ->
-            val allGenresDomain = DataMapper.mapGenreEntitiesToDomain(genreEntities)
-            DataMapper.mapPopularMoviesEntitiesToDomain(movieEntities, allGenresDomain)
-        }
-    }
-
-    override fun setFavoriteMovies(popularMovies: PopularMovies, state: Boolean) {
-        val moviesEntity = DataMapper.mapPopularMoviesDomainToEntity(popularMovies)
-        appExecutors.diskIO()
-            .execute {
-                localDataSource.updateFavoritePopularMovies(
-                    moviesEntity, state
-                )
-            }
-    }
-
-
-
+    // Trending Movies
     override fun getTrendingMovies(): Flow<Resource<List<TrendingMovies>>> =
         object : NetworkBoundResource<List<TrendingMovies>, List<ResultsTrendingMovies>>() {
             override fun loadFromDB(): Flow<List<TrendingMovies>> {
@@ -96,28 +77,8 @@ class MoviesRepository @Inject constructor(
             }
         }.asFlow()
 
-    override fun getFavoriteTrendingMovies(): Flow<List<TrendingMovies>> {
-        val trendingMoviesEntitiesFlow = localDataSource.getTrendingMovies()
-        val allGenreEntitiesFlow = localDataSource.getGenresMovie()
 
-        // Get genres name
-        return trendingMoviesEntitiesFlow.combine(allGenreEntitiesFlow) { movieEntities, genreEntities ->
-            val allGenresDomain = DataMapper.mapGenreEntitiesToDomain(genreEntities)
-            DataMapper.mapTrendingMoviesEntitiesToDomain(movieEntities, allGenresDomain)
-        }
-    }
-
-    override fun setFavoriteTrendingMovies(trendingMovies: TrendingMovies, state: Boolean) =
-        appExecutors.diskIO()
-            .execute {
-                localDataSource.updateFavoriteTrendingMovies(
-                    DataMapper.
-                    mapTrendingMoviesDomainToEntity(trendingMovies), state
-                )
-            }
-
-
-
+    // Genres Movie
     override fun getGenresMovie(): Flow<Resource<List<GenresMovie>>> =
         object : NetworkBoundResource<List<GenresMovie>, List<GenresItem>>() {
             override fun loadFromDB(): Flow<List<GenresMovie>> {
@@ -139,7 +100,7 @@ class MoviesRepository @Inject constructor(
         }.asFlow()
 
 
-
+    // Detail Movie
     override fun getDetailMovie(movieId: Int): Flow<Resource<DetailMovie>> =
         object : NetworkBoundResource<DetailMovie, DetailMovieResponse>() {
             override fun loadFromDB(): Flow<DetailMovie?> {
@@ -160,7 +121,7 @@ class MoviesRepository @Inject constructor(
         }.asFlow()
 
 
-
+    // Casting Movie
     override fun getCastingMovie(movieId: Int): Flow<Resource<List<CastingMovie>>> =
         object : NetworkBoundResource<List<CastingMovie>, List<CastingItem>>() {
 
@@ -183,7 +144,7 @@ class MoviesRepository @Inject constructor(
         }.asFlow()
 
 
-
+    // Similar Movies
     override fun getSimilarMovies(movieId: Int): Flow<Resource<List<SimilarMovies>>> =
         object : NetworkBoundResource<List<SimilarMovies>, List<ResultsSimilar>>() {
 
@@ -209,4 +170,36 @@ class MoviesRepository @Inject constructor(
                 localDataSource.insertSimilarMovies(similarMoviesList)
             }
         }.asFlow()
+
+
+
+    // Favorites
+    override fun getFavorites(): Flow<List<AllMovie>> {
+        val favoritesFlow = localDataSource.getFavorites()
+        val genresFlow = localDataSource.getGenresMovie()
+
+        // Get genres name
+        return favoritesFlow.combine(genresFlow) { movieEntities, genreEntities ->
+            val allGenresDomain: List<GenresMovie> = DataMapper.mapGenreEntitiesToDomain(genreEntities)
+            movieEntities.favoriteToDomain(allGenresDomain)
+        }
+    }
+
+    override suspend fun setFavorite(
+        allMovie: AllMovie,
+        favorite: Boolean
+    ) {
+        if (favorite) {
+            localDataSource.insertFavorite(allMovie.favoriteToEntity())
+        } else {
+            localDataSource.deleteFavorite(allMovie.favoriteToEntity())
+        }
+    }
+
+    override suspend fun removeFavorite(movie: AllMovie) {
+        localDataSource.removeFavoriteMovie(movie)
+    }
+
+    override fun isFavorite(movieId: Int): Flow<Boolean> =
+        localDataSource.getFavoriteById(movieId).map { it != null }
 }

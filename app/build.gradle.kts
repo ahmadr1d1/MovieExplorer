@@ -13,7 +13,7 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.movieexplorer"
+        applicationId = "com.ahmadrd.movieexplorer"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -32,12 +32,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlin {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+            jvmTarget.set(JvmTarget.JVM_17)
         }
     }
     buildFeatures {
@@ -46,17 +46,21 @@ android {
     dynamicFeatures += setOf(":favorite", ":settings")
 }
 
+hilt {
+    enableAggregatingTask = true
+}
+
 dependencies {
 
     implementation(project(":core"))
 
     // Navigation
     api(libs.androidx.navigation.fragment.ktx)
-    api(libs.androidx.navigation.ui.ktx)
-    api(libs.androidx.navigation.dynamic.features.fragment)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.navigation.dynamic.features.fragment)
 
-    api(libs.androidx.activity)
-    api(libs.androidx.constraintlayout)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
