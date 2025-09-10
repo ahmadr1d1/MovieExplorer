@@ -6,12 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.switchMap
+import androidx.lifecycle.viewModelScope
 import com.ahmadrd.movieexplorer.core.data.Resource
+import com.ahmadrd.movieexplorer.core.domain.model.AllMovie
 import com.ahmadrd.movieexplorer.core.domain.model.CastingMovie
 import com.ahmadrd.movieexplorer.core.domain.model.DetailMovie
 import com.ahmadrd.movieexplorer.core.domain.model.SimilarMovies
 import com.ahmadrd.movieexplorer.core.domain.usecase.MoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,6 +25,9 @@ class DetailViewModel @Inject constructor(
     // Trigger for movieId that will be observed by UI
     private val movieIdLiveData = MutableLiveData<Int>()
 
+    // Flag Toast
+    private val _toastMessage = MutableLiveData<String?>()
+    val toastMessage: LiveData<String?> = _toastMessage
 
     val detailMovie: LiveData<Resource<DetailMovie>> =
         movieIdLiveData
@@ -44,10 +50,42 @@ class DetailViewModel @Inject constructor(
                 moviesUseCase.getSimilarMovies(id).asLiveData()
             }
 
+    // State favorite
+    val isFavorite: LiveData<Boolean> =
+        movieIdLiveData
+            .distinctUntilChanged()
+            .switchMap { id ->
+                moviesUseCase.isFavorite(id).asLiveData()
+            }
+
+    // Toggle favorite
+    fun toggleFavorite(allMovie: AllMovie) {
+        viewModelScope.launch {
+            val currentState = isFavorite.value ?: false
+            val newState = !currentState
+
+            // Update database
+            moviesUseCase.setFavorite(allMovie, newState)
+
+            // Set toast message berdasarkan state baru (bukan state lama)
+            _toastMessage.value = if (newState) {
+                "Success Added to favorite"
+            } else {
+                "Success Removed from favorite"
+            }
+        }
+    }
+
+    // Clear toast message setelah ditampilkan
+    fun clearToastMessage() {
+        _toastMessage.value = null
+    }
+
     fun setMovieId(id: Int) {
-        // Avoid re-emitting if it is the same
         if (movieIdLiveData.value != id) {
             movieIdLiveData.value = id
+            // Clear toast message untuk movie baru
+            _toastMessage.value = null
         }
     }
 }
