@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="110dp"
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="8dp"
+    tools:ignore="TextSizeCheck">
 
     <!-- Shapable ImageView -->
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/image_cast"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:contentDescription="Tom Holland"
+        android:contentDescription="@string/cast_member_image_content_description"
         android:scaleType="centerCrop"
         android:src="@drawable/baseline_person_24"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
@@ -25,9 +27,9 @@
         android:layout_marginTop="6dp"
         android:ellipsize="end"
         android:maxWidth="100dp"
-        android:textAlignment="center"
         android:maxLines="2"
-        android:text="Tom Holland"
+        android:text="@string/cast_member_name_placeholder"
+        android:textAlignment="center"
         android:textColor="@color/text_primary"
         android:textSize="14sp"
         android:textStyle="bold" />
@@ -39,9 +41,9 @@
         android:layout_height="match_parent"
         android:ellipsize="middle"
         android:maxWidth="85dp"
-        android:textAlignment="center"
         android:maxLines="2"
-        android:text="Peter Parker"
+        android:text="@string/cast_member_character_placeholder"
+        android:textAlignment="center"
         android:textColor="@color/text_secondary"
         android:textSize="12sp" />
 

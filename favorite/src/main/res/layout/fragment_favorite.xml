@@ -19,8 +19,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingTop="20dp"
-            android:paddingBottom="16dp">
+            android:paddingVertical="12dp">
 
             <!-- Left Header -->
             <LinearLayout
@@ -34,23 +33,24 @@
                     android:id="@+id/tv_page_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="❤️ My Favorites"
+                    android:layout_marginEnd="12dp"
+                    android:text="@string/favorites_page_title"
+                    android:textColor="@color/gradient_text"
                     android:textSize="24sp"
                     android:textStyle="bold"
-                    android:textColor="@color/gradient_text"
-                    android:layout_marginEnd="12dp" />
+                    tools:ignore="TextContrastCheck" />
 
                 <TextView
                     android:id="@+id/tv_favorite_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="12 movies"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/accent_color"
                     android:background="@drawable/favorite_count_background"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="4dp"
+                    android:textColor="@color/accent_color"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    tools:ignore="TextContrastCheck"
                     tools:text="12 movies" />
 
             </LinearLayout>
@@ -60,8 +60,8 @@
                 android:id="@+id/btn_sort"
                 style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:text="📊 Sort"
+                android:layout_height="48dp"
+                android:text="@string/sort_favorites_movies"
                 android:textSize="12sp"
                 android:minWidth="0dp"
                 android:paddingHorizontal="12dp"
@@ -101,14 +101,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="💔"
+                    android:text="@string/empty_movies_title"
                     android:textSize="48sp"
                     android:layout_marginBottom="16dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="No Favorites Yet"
+                    android:text="@string/empty_favorites_second_title"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="@android:color/white"
@@ -117,7 +117,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Start exploring movies and add them to your\nfavorites to see them here!"
+                    android:text="@string/empty_favorites_description"
                     android:textSize="14sp"
                     android:textColor="@color/subtitle_text"
                     android:textAlignment="center"
@@ -128,7 +128,7 @@
                     android:id="@+id/btn_explore_movies"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Explore Movies"
+                    android:text="@string/button_explore_movies"
                     app:backgroundTint="@color/accent_color"
                     app:cornerRadius="20dp" />
 

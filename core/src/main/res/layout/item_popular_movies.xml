@@ -39,13 +39,14 @@
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="match_parent"
+                    android:contentDescription="@string/rating_star_content_description"
                     android:src="@drawable/baseline_star_24" />
 
                 <TextView
                     android:id="@+id/rating_popular_movies"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="8.4"
+                    tools:text="8.4"
                     android:textColor="@color/star"
                     android:textStyle="bold"
                     android:paddingStart="4dp" />
@@ -69,7 +70,7 @@
                 android:textColor="@color/text_primary"
                 android:fontFamily="@font/archivo_bold"
                 android:textStyle="bold"
-                android:text="@string/popular_movies_title"
+                android:text="@string/title_movie"
                 android:textAppearance="?attr/textAppearanceTitleLarge"
                 tools:text="@tools:sample/lorem"
 
@@ -82,7 +83,7 @@
                 android:layout_marginVertical="8dp"
                 android:ellipsize="end"
                 android:textSize="12sp"
-                android:text="@string/popular_movies_release_date"
+                android:text="@string/movie_release_date"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="?android:attr/textColorSecondary"
                 app:drawableStartCompat="@drawable/releasedate"
@@ -96,10 +97,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:paddingVertical="4dp"
-                android:text="Action"
+                android:text="@string/genres"
                 android:textSize="12sp"
                 android:textColor="@android:color/holo_blue_dark"
-                tools:text="Action" />
+                tools:text="Action"
+                tools:ignore="VisualLintBounds" />
         </LinearLayout>
 
     </LinearLayout>

@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="popular_movies_image">popular movies image</string>
-    <string name="popular_movies_title">popular movies title</string>
-    <string name="popular_movies_release_date">popular movies year</string>
+    <string name="title_movie">movies title</string>
+    <string name="movie_release_date">movies release date</string>
     <string name="name_movie">Movie Name</string>
+    <string name="cast_member_name_placeholder">Tom Holland</string>
+    <string name="cast_member_character_placeholder">Peter Parker</string>
+    <string name="cast_member_image_content_description">Cast Member Image</string>
+    <string name="favorite_movie_title_placeholder">Spider-Man: No Way Home</string>
+    <string name="favorite_movie_overview_placeholder">Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes of being a super-hero. When he asks for help from Doctor Strange the stakes become even more dangerous…</string>
+    <string name="added_text">Added</string>
+    <string name="remove_button_text">🗑️ Remove</string>
+    <string name="favorite_movie_poster_content_description">Favorite Movie Poster</string>
+    <string name="rating_star_content_description">Rating Star</string>
+    <string name="genres">Action, Comedy, Drama</string>
+    <string name="button_genres">Action</string>
+    <string name="similar_movie_picture">similar movie picture</string>
+    <string name="title_similar_movie">title similar movie</string>
 </resources>
