@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmadrd.movieexplorer.core.R
-import com.ahmadrd.movieexplorer.core.databinding.ItemSimilarMovieBinding
+import com.ahmadrd.movieexplorer.core.databinding.ItemHorizontalMoviesBinding
 import com.ahmadrd.movieexplorer.core.domain.model.SimilarMovies
 import com.ahmadrd.movieexplorer.core.utils.FormatTime
 import com.ahmadrd.movieexplorer.core.utils.TMDBImage
@@ -20,7 +20,7 @@ class ListSimilarMoviesAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ListViewHolder(
-            ItemSimilarMovieBinding.inflate(
+            ItemHorizontalMoviesBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -32,17 +32,17 @@ class ListSimilarMoviesAdapter :
         holder.bind(data)
     }
 
-    inner class ListViewHolder(private var binding: ItemSimilarMovieBinding) :
+    inner class ListViewHolder(private var binding: ItemHorizontalMoviesBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: SimilarMovies) {
             Glide.with(itemView.context)
                 .load(TMDBImage.BASE_IMAGE_URL + data.posterPath)
                 .error(R.drawable.baseline_broken_image_24)
-                .into(binding.similarMoviesImage)
-            binding.similarMoviesTitle.text = data.title
-            binding.similarMoviesReleaseDate.text = FormatTime.formatRelativeTimeFromDate(data.releaseDate)
-            binding.ratingSimilarMovies.text = formatRating(data.voteAverage ?: -0.0)
-            binding.genreSimilarMovies.text = data.genreNames?.joinToString(", ")
+                .into(binding.moviesImage)
+            binding.moviesTitle.text = data.title
+            binding.moviesReleaseDate.text = FormatTime.formatRelativeTimeFromDate(data.releaseDate)
+            binding.ratingMovies.text = formatRating(data.voteAverage ?: -0.0)
+            binding.moviesGenres.text = data.genreNames?.joinToString(", ")
         }
 
         init {

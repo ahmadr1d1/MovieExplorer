@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ahmadrd.movieexplorer.core.R
-import com.ahmadrd.movieexplorer.core.databinding.ItemTrendingMoviesBinding
+import com.ahmadrd.movieexplorer.core.databinding.ItemHorizontalMoviesBinding
 import com.ahmadrd.movieexplorer.core.domain.model.TrendingMovies
 import com.ahmadrd.movieexplorer.core.utils.FormatTime
 import com.ahmadrd.movieexplorer.core.utils.TMDBImage
@@ -20,7 +20,7 @@ class ListTrendingMoviesAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ListViewHolder(
-            ItemTrendingMoviesBinding.inflate(
+            ItemHorizontalMoviesBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -32,17 +32,17 @@ class ListTrendingMoviesAdapter :
         holder.bind(data)
     }
 
-    inner class ListViewHolder(private var binding: ItemTrendingMoviesBinding) :
+    inner class ListViewHolder(private var binding: ItemHorizontalMoviesBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: TrendingMovies) {
             Glide.with(itemView.context)
                 .load(TMDBImage.BASE_IMAGE_URL + data.posterPath)
                 .error(R.drawable.baseline_broken_image_24)
-                .into(binding.trendingMoviesImage)
-            binding.titleTrendingMovies.text = data.title
-            binding.releaseDateTrendingMovies.text = FormatTime.formatRelativeTimeFromDate(data.releaseDate)
-            binding.ratingTrendingMovies.text = formatRating(data.voteAverage ?: -0.0)
-            binding.genreTrendingMovies.text = data.genreNames?.joinToString ( ", " )
+                .into(binding.moviesImage)
+            binding.moviesTitle.text = data.title
+            binding.moviesReleaseDate.text = FormatTime.formatRelativeTimeFromDate(data.releaseDate)
+            binding.ratingMovies.text = formatRating(data.voteAverage ?: -0.0)
+            binding.moviesGenres.text = data.genreNames?.joinToString(", ")
         }
 
         init {

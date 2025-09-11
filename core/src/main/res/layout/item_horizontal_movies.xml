@@ -1,9 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/card_item"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="160dp"
+    android:layout_height="match_parent"
     android:layout_margin="8dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
@@ -11,21 +11,23 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Image Container with Rating Badge -->
+        <!-- Portrait Poster + Overlay Rating -->
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="350dp">
+            android:layout_height="240dp">
 
-            <ImageView
-                android:id="@+id/popular_movies_image"
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/movies_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/movies_image_poster"
                 android:scaleType="centerCrop"
-                tools:src="@tools:sample/backgrounds/scenic" />
+                app:shapeAppearanceOverlay="@style/roundedCorners"
+                tools:ignore="ImageContrastCheck"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
             <!-- Rating Badge -->
             <LinearLayout
@@ -48,7 +50,7 @@
                     tools:ignore="ImageContrastCheck" />
 
                 <TextView
-                    android:id="@+id/rating_popular_movies"
+                    android:id="@+id/rating_movies"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="2dp"
@@ -65,54 +67,49 @@
         <!-- Content Container -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="12dp">
 
             <!-- Movie Title -->
             <TextView
-                android:id="@+id/popular_movies_title"
+                android:id="@+id/movies_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:fontFamily="@font/archivo_bold"
                 android:maxLines="3"
                 android:maxWidth="120dp"
                 android:text="@string/title_movie"
-                android:textAppearance="?attr/textAppearanceTitleMedium"
                 android:textColor="@color/text_primary"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
-                tools:text="@tools:sample/lorem" />
+                tools:text="Inception" />
 
             <!-- Release Date -->
             <TextView
-                android:id="@+id/popular_movies_release_date"
-                android:layout_width="wrap_content"
+                android:id="@+id/movies_release_date"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:drawablePadding="4dp"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:text="@string/movie_release_date"
-                android:textAppearance="?attr/textAppearanceBodySmall"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="12sp"
                 app:drawableStartCompat="@drawable/releasedate"
                 app:drawableTint="@color/text_secondary"
-                tools:text="2014" />
+                tools:text="2019" />
 
             <!-- Genre Tag -->
             <TextView
-                android:id="@+id/genre_popular_movies"
+                android:id="@+id/movies_genres"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:ellipsize="end"
-                android:maxLines="3"
                 android:maxWidth="120dp"
-                android:paddingVertical="4dp"
+                android:maxLines="3"
                 android:text="@string/genres"
                 android:textColor="@android:color/holo_blue_dark"
                 android:textSize="11sp"

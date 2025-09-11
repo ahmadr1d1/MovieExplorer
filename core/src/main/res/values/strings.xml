@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="popular_movies_image">popular movies image</string>
+    <string name="movies_image_poster">movies image poster</string>
     <string name="title_movie">movies title</string>
     <string name="movie_release_date">movies release date</string>
     <string name="name_movie">Movie Name</string>
