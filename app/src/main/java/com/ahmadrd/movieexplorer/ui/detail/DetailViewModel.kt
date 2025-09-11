@@ -1,5 +1,6 @@
 package com.ahmadrd.movieexplorer.ui.detail
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,6 +8,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
+import com.ahmadrd.movieexplorer.core.R
 import com.ahmadrd.movieexplorer.core.data.Resource
 import com.ahmadrd.movieexplorer.core.domain.model.AllMovie
 import com.ahmadrd.movieexplorer.core.domain.model.CastingMovie
@@ -19,7 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val moviesUseCase: MoviesUseCase
+    private val moviesUseCase: MoviesUseCase,
+    private val application: Application
 ) : ViewModel() {
 
     // Trigger for movieId that will be observed by UI
@@ -67,18 +70,24 @@ class DetailViewModel @Inject constructor(
             // Update database
             moviesUseCase.setFavorite(allMovie, newState)
 
-            // Set toast message berdasarkan state baru (bukan state lama)
             _toastMessage.value = if (newState) {
-                "Success Added to favorite"
+                application.getString(R.string.success_added)
             } else {
-                "Success Removed from favorite"
+                application.getString(R.string.success_removed)
             }
         }
     }
 
-    // Clear toast message setelah ditampilkan
+    // Clear toast message after showing up
     fun clearToastMessage() {
         _toastMessage.value = null
+    }
+
+    fun retry() {
+        movieIdLiveData.value?.let { currentId ->
+            // retrigger with the same value
+            movieIdLiveData.value = currentId
+        }
     }
 
     fun setMovieId(id: Int) {

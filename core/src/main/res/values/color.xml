@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources tools:ignore="UnusedResources" xmlns:tools="http://schemas.android.com/tools">
+    <!--    Used Resources but android compile detect unused   -->
+
     <!-- Primary Blues - Deep Cinema Blue -->
     <color name="cinema_blue">#FF1565C0</color>           <!-- Main blue -->
     <color name="cinema_blue_dark">#FF0D47A1</color>      <!-- Darker blue -->

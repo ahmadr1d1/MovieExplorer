@@ -88,7 +88,7 @@ class MoviesRepository @Inject constructor(
             }
 
             override fun shouldFetch(data: List<GenresMovie>?): Boolean =
-                data.isNullOrEmpty()
+                data.isNullOrEmpty() // Set true if want to always fetch from remote API
 
             override suspend fun createCall(): Flow<ApiResponse<List<GenresItem>>> =
                 remoteDataSource.getGenresMovie()

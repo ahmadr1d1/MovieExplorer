@@ -87,11 +87,8 @@ class LocalDataSource @Inject constructor(
 
     suspend fun deleteFavorite(movie: FavoriteEntity) = favoriteDao.delete(movie)
 
-    suspend fun removeFavoriteMovie(movie: AllMovie) { // Tetap menerima AllMovie (domain model)
-        // 1. Anda PERLU mengkonversi/memetakan objek AllMovie ke FavoriteMovieEntity
-        val favoriteEntityToDelete = movie.favoriteToEntity() // Atau logika mapping lainnya
-
-        // 2. Kemudian baru panggil fungsi DAO dengan entity yang sudah dikonversi
+    suspend fun removeFavoriteMovie(movie: AllMovie) {
+        val favoriteEntityToDelete = movie.favoriteToEntity()
         favoriteDao.delete(favoriteEntityToDelete)
     }
 

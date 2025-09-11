@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ahmadrd.movieexplorer.R
+import com.ahmadrd.movieexplorer.core.R.string
 import com.ahmadrd.movieexplorer.core.data.Resource
 import com.ahmadrd.movieexplorer.core.ui.ListGenreMoviesAdapter
 import com.ahmadrd.movieexplorer.core.ui.ListPopularMoviesAdapter
@@ -48,10 +48,13 @@ class HomeFragment : Fragment() {
 
         with(binding) {
             etSearch.setOnClickListener {
-                showToast("This feature is not available yet")
+                showToast("Search is not available yet")
             }
             btnSwitchGenreMovies.setOnClickListener {
                 showToast("This feature is not available yet")
+            }
+            viewError.btnRetry.setOnClickListener {
+                homeViewModel.refresh()
             }
         }
     }
@@ -103,7 +106,7 @@ class HomeFragment : Fragment() {
                             showLoading(false)
                             binding.viewError.root.visibility = View.VISIBLE
                             binding.viewError.tvErrorMessage.text =
-                                popularMovies.message ?: getString(R.string.something_wrong)
+                                popularMovies.message ?: getString(string.something_wrong)
                         }
                     }
                 }
@@ -132,7 +135,7 @@ class HomeFragment : Fragment() {
                             showLoading(false)
                             binding.viewError.root.visibility = View.VISIBLE
                             binding.viewError.tvErrorMessage.text =
-                                trendingMovies.message ?: getString(R.string.something_wrong)
+                                trendingMovies.message ?: getString(string.something_wrong)
                         }
                     }
                 }
@@ -160,7 +163,7 @@ class HomeFragment : Fragment() {
                             showLoading(false)
                             binding.viewError.root.visibility = View.VISIBLE
                             binding.viewError.tvErrorMessage.text =
-                                genresMovie.message ?: getString(R.string.something_wrong)
+                                genresMovie.message ?: getString(string.something_wrong)
                         }
                     }
                 }
@@ -177,8 +180,7 @@ class HomeFragment : Fragment() {
             context,
             message,
             Toast.LENGTH_SHORT
-        )
-            .show()
+        ).show()
     }
 
 }

@@ -150,33 +150,43 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun updateFavoriteUi(state: FavoritesViewState) {
-        when (state) {
-            FavoritesViewState.LOADING -> {
-                binding.progressBarFavorite.isVisible = true
-                binding.rvFavorites.isVisible = false
-                binding.llEmptyState.isVisible = false
-                binding.tvFavoriteCount.isVisible = false
-            }
+        with(binding) {
+            when (state) {
+                FavoritesViewState.LOADING -> {
+                    progressBarFavorite.isVisible = true
+                    rvFavorites.isVisible = false
+                    llEmptyState.isVisible = false
+                    tvFavoriteCount.isVisible = false
+                    viewErrorFavorite.root.isVisible = false
+                }
 
-            FavoritesViewState.SUCCESS -> {
-                binding.progressBarFavorite.isVisible = false
-                binding.rvFavorites.isVisible = true
-                binding.llEmptyState.isVisible = false
-                binding.tvFavoriteCount.isVisible = true
-            }
+                FavoritesViewState.SUCCESS -> {
+                    progressBarFavorite.isVisible = false
+                    rvFavorites.isVisible = true
+                    llEmptyState.isVisible = false
+                    tvFavoriteCount.isVisible = true
+                    viewErrorFavorite.root.isVisible = false
+                }
 
-            FavoritesViewState.EMPTY -> {
-                binding.progressBarFavorite.isVisible = false
-                binding.rvFavorites.isVisible = false
-                binding.llEmptyState.isVisible = true
-                binding.tvFavoriteCount.isVisible = true
-            }
+                FavoritesViewState.EMPTY -> {
+                    progressBarFavorite.isVisible = false
+                    rvFavorites.isVisible = false
+                    llEmptyState.isVisible = true
+                    tvFavoriteCount.isVisible = true
+                    viewErrorFavorite.root.isVisible = false
+                }
 
-            FavoritesViewState.ERROR -> {
-                binding.progressBarFavorite.isVisible = false
-                binding.rvFavorites.isVisible = false
-                binding.llEmptyState.isVisible = false
-                binding.tvFavoriteCount.isVisible = false
+                FavoritesViewState.ERROR -> {
+                    progressBarFavorite.isVisible = false
+                    rvFavorites.isVisible = false
+                    llEmptyState.isVisible = false
+                    tvFavoriteCount.isVisible = false
+                    viewErrorFavorite.root.isVisible = true
+
+                    viewErrorFavorite.btnRetry.setOnClickListener {
+                        favoriteViewModel.retry()
+                    }
+                }
             }
         }
     }

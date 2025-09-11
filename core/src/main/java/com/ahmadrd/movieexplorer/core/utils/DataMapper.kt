@@ -229,7 +229,7 @@ object DataMapper {
 
     // Casting Movie
     fun mapCastingMovieResponsesToEntities(
-        movieId: Int, // Assume movieId is already validated before this call
+        movieId: Int,
         input: List<CastingItem>
     ): List<CastingMovieEntity> {
         return input.mapNotNull {
@@ -248,7 +248,7 @@ object DataMapper {
                     popularity = it.popularity,
                     name = it.name,
                     profilePath = it.profilePath,
-                    id = it.id, // ID is now non-null and > 0
+                    id = it.id,
                     adult = it.adult,
                     order = it.order
                 )
@@ -279,7 +279,7 @@ object DataMapper {
 
     // Similar Movies
     fun mapSimilarMovieResponsesToEntities(
-        movieId: Int, // Assume movieId is already validated
+        movieId: Int,
         input: List<ResultsSimilar>?
     ): List<SimilarMoviesEntity> {
         return input?.mapNotNull {
@@ -300,7 +300,7 @@ object DataMapper {
                     releaseDate = it.releaseDate,
                     popularity = it.popularity,
                     voteAverage = it.voteAverage,
-                    id = it.id, // ID is now non-null and > 0
+                    id = it.id,
                     adult = it.adult,
                     voteCount = it.voteCount
                 )

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources tools:ignore="UnusedResources" xmlns:tools="http://schemas.android.com/tools">
+    <!--    Used Resources but android compile detect some resource unused   -->
     <string name="movies_image_poster">movies image poster</string>
     <string name="title_movie">movies title</string>
     <string name="movie_release_date">movies release date</string>
@@ -17,4 +18,9 @@
     <string name="button_genres">Action</string>
     <string name="similar_movie_picture">similar movie picture</string>
     <string name="title_similar_movie">title similar movie</string>
+    <string name="success_added">Success Added to favorite</string>
+    <string name="success_removed">Success Removed from favorite</string>
+    <string name="movie_id_empty">Movie ID is not found or invalid</string>
+    <string name="something_wrong">Something went Wrong</string>
+    <string name="retry_button_text">Retry</string>
 </resources>

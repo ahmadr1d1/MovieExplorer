@@ -12,9 +12,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.ahmadrd.movieexplorer.core.R.string
 import com.ahmadrd.movieexplorer.R
 import com.ahmadrd.movieexplorer.core.data.Resource
-import com.ahmadrd.movieexplorer.core.domain.model.AllMovie
 import com.ahmadrd.movieexplorer.core.domain.model.DetailMovie
 import com.ahmadrd.movieexplorer.core.ui.ListCastingMovieAdapter
 import com.ahmadrd.movieexplorer.core.ui.ListSimilarMoviesAdapter
@@ -51,14 +51,14 @@ class DetailActivity : AppCompatActivity() {
             finish()
         }
 
+        binding.viewErrorDetail.btnRetry.setOnClickListener {
+            viewModel.retry()
+        }
+
         val movieId = intent.getIntExtra(EXTRA_MOVIE_ID, -1)
         Log.i("DetailActivity", "Movie id received: $movieId")
         if (movieId == -1 || movieId == 0) { // Check for invalid IDs
-            Toast.makeText(
-                this,
-                "Movie ID is not found or invalid",
-                Toast.LENGTH_SHORT
-            ).show()
+            showLongToast(getString(string.movie_id_empty))
             finish()
             return
         }
@@ -86,13 +86,13 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun observeFavoriteStatus() {
-        // Observer untuk status favorit (hanya update UI)
+        // Observer for favorite status (UI updates only)
         viewModel.isFavorite.observe(this) { isFav ->
             Log.i("DetailActivity", "Favorite status changed: $isFav")
             updateFavoriteUI(isFav)
         }
 
-        // Observer untuk toast message
+        // Observer for toast message
         viewModel.toastMessage.observe(this) { message ->
             message?.let {
                 Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
@@ -123,7 +123,7 @@ class DetailActivity : AppCompatActivity() {
                     result.data?.let { detailMovie ->
                         populateDetailMovieUi(detailMovie)
                         setupRecyclerView()
-                        // Set OnClickListener for fabFavorite here, ensuring detailMovie is available
+                        // Set OnClickListener favorite button here, ensuring detailMovie is available
                         binding.fabFavorite.setOnClickListener {
                             val allMovie = detailMovie.toAllMovie()
                             if (allMovie != null) {
@@ -167,7 +167,7 @@ class DetailActivity : AppCompatActivity() {
             tvDuration.text = data.runtime.toString()
             tvOverview.text = data.overview
             tvLanguage.text = data.originalLanguage
-            genreDetailMovie.text = data.genres?.joinToString { it.name ?: "empty" }
+            genreDetailMovie.text = data.genres?.joinToString { it.name ?: "no genres" }
             ratingDetail.text = formatRating(data.voteAverage)
         }
     }
@@ -177,8 +177,17 @@ class DetailActivity : AppCompatActivity() {
             when (result) {
                 is Resource.Loading -> showLoading(true) // Consider separate loading for casting
                 is Resource.Success -> {
-                    showLoading(false) // Or adjust based on overall loading strategy
-                    castingAdapter.submitList(result.data.orEmpty())
+                    showLoading(false)
+                    if (result.data.isNullOrEmpty()) {
+                        showLoading(false)
+                        showLongToast("Not found casting members for this movie")
+                        Log.w(
+                            "DetailActivity",
+                            "Casting members movie Error: Data is null or empty"
+                        )
+                    } else {
+                        castingAdapter.submitList(result.data)
+                    }
                 }
 
                 is Resource.Error -> {
@@ -195,13 +204,22 @@ class DetailActivity : AppCompatActivity() {
             when (result) {
                 is Resource.Loading -> showLoading(true) // Consider separate loading for similar movies
                 is Resource.Success -> {
-                    showLoading(false) // Or adjust based on overall loading strategy
-                    similarMoviesAdapter.submitList(result.data.orEmpty())
+                    showLoading(false)
+                    if (result.data.isNullOrEmpty()) {
+                        showLoading(false)
+                        showLongToast("Not found similar movies for this movie")
+                        Log.w(
+                            "DetailActivity",
+                            "Similar Movies Error: Data is null or empty"
+                        )
+                    } else {
+                        similarMoviesAdapter.submitList(result.data)
+                    }
                 }
 
                 is Resource.Error -> {
                     showLoading(false)
-                    // showError(result.message) // Consider specific error handling for similar movies
+                    showError(result.message) // Consider specific error handling for similar movies
                     Log.e("DetailActivity", "Similar Movies Error: ${result.message}")
                 }
             }
@@ -218,6 +236,10 @@ class DetailActivity : AppCompatActivity() {
         binding.imageStars.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
         if (isLoading) binding.viewErrorDetail.root.visibility = View.GONE
 
+    }
+
+    private fun showLongToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
     private fun showError(message: String?) {

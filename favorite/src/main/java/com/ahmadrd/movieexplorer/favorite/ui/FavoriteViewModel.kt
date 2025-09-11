@@ -1,7 +1,9 @@
 package com.ahmadrd.movieexplorer.favorite.ui
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.ahmadrd.movieexplorer.core.domain.model.AllMovie
 import com.ahmadrd.movieexplorer.core.domain.usecase.MoviesUseCase
@@ -13,17 +15,27 @@ class FavoriteViewModel(
     private val moviesUseCase: MoviesUseCase
 ) : ViewModel() {
 
-    val favoriteMovies = moviesUseCase.getFavorites().map { movies ->
-        if (movies.isEmpty()) {
-            FavoriteState.Empty
-        } else {
-            FavoriteState.Success(movies)
-        }
-    }.asLiveData()
+    // Trigger refresh
+    private val refreshTrigger = MutableLiveData(Unit)
+
+    val favoriteMovies = refreshTrigger.switchMap {
+        moviesUseCase.getFavorites().map { movies ->
+            if (movies.isEmpty()) {
+                FavoriteState.Empty
+            } else {
+                FavoriteState.Success(movies)
+            }
+        }.asLiveData()
+    }
 
     fun removeMovieFromFavorite(movie: AllMovie) {
         viewModelScope.launch {
             moviesUseCase.removeFavorite(movie)
+            retry() // auto refresh after deleting item
         }
+    }
+
+    fun retry() {
+        refreshTrigger.value = Unit
     }
 }
