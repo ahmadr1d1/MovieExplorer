@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -22,6 +23,7 @@ import com.ahmadrd.movieexplorer.favorite.databinding.FragmentFavoriteBinding
 import com.ahmadrd.movieexplorer.favorite.di.DaggerFavoriteComponent
 import com.ahmadrd.movieexplorer.ui.detail.DetailActivity
 import dagger.hilt.android.EntryPointAccessors
+import com.ahmadrd.movieexplorer.core.R.style
 import javax.inject.Inject
 
 class FavoriteFragment : Fragment() {
@@ -85,8 +87,21 @@ class FavoriteFragment : Fragment() {
             startActivity(intent)
         }
         listFavoriteAdapter.onRemoveClick = { selectedMovie ->
-            favoriteViewModel.removeMovieFromFavorite(selectedMovie)
-            showToast("Success removed item")
+            AlertDialog.Builder(
+                requireContext(),
+                style.CustomAlertDialog
+            ).apply {
+                setTitle("Remove Item")
+                setMessage("Are you sure want to remove this item?")
+                setCancelable(true)
+                setPositiveButton("Yes") { _, _ ->
+                    favoriteViewModel.removeMovieFromFavorite(selectedMovie)
+                    showToast("Success removed item")
+                }
+                create()
+                show()
+            }
+
         }
 
         binding.rvFavorites.apply {
@@ -102,6 +117,7 @@ class FavoriteFragment : Fragment() {
                 is FavoriteState.Loading -> {
                     updateFavoriteUi(FavoritesViewState.LOADING)
                 }
+
                 is FavoriteState.Success -> {
                     updateFavoriteUi(FavoritesViewState.SUCCESS)
 
@@ -114,10 +130,12 @@ class FavoriteFragment : Fragment() {
                         movieCount
                     )
                 }
+
                 is FavoriteState.Empty -> {
                     updateFavoriteUi(FavoritesViewState.EMPTY)
-                    binding.tvFavoriteCount.text = "0 movies"
+                    binding.tvFavoriteCount.text = getString(R.string.empty_movies_count)
                 }
+
                 is FavoriteState.Error -> {
                     updateFavoriteUi(FavoritesViewState.ERROR)
                     showToast(state.message)
@@ -139,18 +157,21 @@ class FavoriteFragment : Fragment() {
                 binding.llEmptyState.isVisible = false
                 binding.tvFavoriteCount.isVisible = false
             }
+
             FavoritesViewState.SUCCESS -> {
                 binding.progressBarFavorite.isVisible = false
                 binding.rvFavorites.isVisible = true
                 binding.llEmptyState.isVisible = false
                 binding.tvFavoriteCount.isVisible = true
             }
+
             FavoritesViewState.EMPTY -> {
                 binding.progressBarFavorite.isVisible = false
                 binding.rvFavorites.isVisible = false
                 binding.llEmptyState.isVisible = true
                 binding.tvFavoriteCount.isVisible = true
             }
+
             FavoritesViewState.ERROR -> {
                 binding.progressBarFavorite.isVisible = false
                 binding.rvFavorites.isVisible = false
@@ -159,6 +180,7 @@ class FavoriteFragment : Fragment() {
             }
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         binding.rvFavorites.adapter = null // Clear adapter to avoid memory leaks

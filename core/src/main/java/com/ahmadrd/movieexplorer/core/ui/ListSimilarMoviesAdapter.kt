@@ -16,7 +16,8 @@ import kotlin.math.round
 class ListSimilarMoviesAdapter :
     ListAdapter<SimilarMovies, ListSimilarMoviesAdapter.ListViewHolder>(DIFF_CALLBACK) {
 
-    var onItemClick: ((SimilarMovies) -> Unit)? = null
+        // This feature is not available for now
+//    var onItemClick: ((SimilarMovies) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ListViewHolder(
@@ -45,11 +46,12 @@ class ListSimilarMoviesAdapter :
             binding.moviesGenres.text = data.genreNames?.joinToString(", ")
         }
 
-        init {
-            itemView.setOnClickListener {
-                onItemClick?.invoke(getItem(bindingAdapterPosition))
-            }
-        }
+        // This feature is not available for now
+//        init {
+//            itemView.setOnClickListener {
+//                onItemClick?.invoke(getItem(bindingAdapterPosition))
+//            }
+//        }
     }
 
     private fun formatRating(rating: Double): String {

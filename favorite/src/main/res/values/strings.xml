@@ -7,4 +7,5 @@
     <string name="empty_favorites_second_title">No Favorites Yet</string>
     <string name="empty_favorites_description">Start exploring movies and add them to your\nfavorites to see them here!</string>
     <string name="button_explore_movies">Explore Movies</string>
+    <string name="empty_movies_count">0 movies</string>
 </resources>
