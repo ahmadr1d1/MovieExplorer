@@ -66,6 +66,7 @@ dependencies {
     api(libs.recyclerview)
     api(libs.androidx.lifecycle.livedata.ktx)
     api(libs.androidx.lifecycle.viewmodel.ktx)
+    api(libs.lottie)
 
     // Networking
     api(libs.retrofit)
