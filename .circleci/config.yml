@@ -6,7 +6,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: cimg/android:2023.12.1-android33
+      - image: cimg/android:2023.12.1-android36
     resource_class: large
     steps:
       - checkout
