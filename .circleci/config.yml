@@ -7,8 +7,9 @@ jobs:
   build:
     executor:
       name: android/android-machine
-      # Modern image compatible with java 17
-      tag: 2023.07.1
+      # Circle ci free plans
+      resource_class: medium
+      image: 2023.07.1
     steps:
       - checkout
       - restore_cache:
