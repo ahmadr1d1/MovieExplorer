@@ -78,6 +78,8 @@ dependencies {
     // Database
     api(libs.androidx.room.runtime)
     api(libs.androidx.room.ktx)
+    implementation(libs.android.database.sqlcipher)
+    implementation(libs.androidx.sqlite.ktx)
 
     // DI
     implementation(libs.hilt.android)

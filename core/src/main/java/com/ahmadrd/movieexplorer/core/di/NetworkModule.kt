@@ -6,6 +6,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.CertificatePinner
 import javax.inject.Singleton
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -19,8 +20,12 @@ class NetworkModule {
     @Singleton
     @Provides
     fun provideOkHttpClient(): OkHttpClient {
-        val loggingInterceptor = HttpLoggingInterceptor().
-        setLevel(
+        val hostname = "api.themoviedb.org"
+        val certificatePinner = CertificatePinner.Builder()
+            .add(hostname, "sha256/f78NVAesYtdZ9OGSbK7VtGQkSIVykh3DnduuLIJHMu4=")
+            .build()
+
+        val loggingInterceptor = HttpLoggingInterceptor().setLevel(
             if (BuildConfig.DEBUG)
                 HttpLoggingInterceptor.Level.BODY
             else
@@ -28,6 +33,7 @@ class NetworkModule {
         )
 
         return OkHttpClient.Builder()
+            .certificatePinner(certificatePinner)
             .addInterceptor { chain ->
                 val originalRequest = chain.request()
                 val newRequest = originalRequest.newBuilder()

@@ -22,6 +22,8 @@ recyclerview = "1.4.0"
 room = "2.8.0"
 activity = "1.11.0"
 lottie = "6.6.7"
+androidDatabaseSqlcipher = "4.5.4"
+sqliteKtx = "2.6.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -49,6 +51,8 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
+android-database-sqlcipher = { module = "net.zetetic:android-database-sqlcipher", version.ref = "androidDatabaseSqlcipher" }
+androidx-sqlite-ktx = { module = "androidx.sqlite:sqlite-ktx", version.ref = "sqliteKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
