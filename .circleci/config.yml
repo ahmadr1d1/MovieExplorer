@@ -1,54 +1,99 @@
 version: 2.1
 
+orbs:
+  android: circleci/android@3.1.0
+
 jobs:
   build:
     docker:
-      - image: cimg/android:2025.09
-    resource_class: large
+      - image: cimg/android:2024.04.1
+    environment:
+      # Environment variables that will be read by System.getenv in build.gradle.kts
+      TMDB_API_KEY: $TMDB_API_KEY
+      API_BASE_URL_TMDB: $API_BASE_URL_TMDB
+      # Java and Android settings for free plan (limited memory)
+      _JAVA_OPTIONS: "-Xmx2g"
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=1 -Dorg.gradle.parallel=false"
+      COMPILE_SDK_VERSION: 36
+      TARGET_SDK_VERSION: 36
     steps:
       - checkout
 
+      # Setup Android SDK for API 36
       - run:
-          name: Print Java Version
-          command: java -version
+          name: Setup Android SDK
+          command: |
+            # Update SDK manager
+            echo "y" | sdkmanager --update
+            
+            # Install required SDK components for API 36
+            echo "y" | sdkmanager "platforms;android-36"
+            echo "y" | sdkmanager "build-tools;36.0.0"
+            echo "y" | sdkmanager "platform-tools"
+            
+            # Accept all licenses
+            echo "y" | sdkmanager --licenses
+            
+            # Verify installation
+            sdkmanager --list | grep "android-36"
 
+      # Setup gradle cache for faster builds
       - restore_cache:
-          key: android-cache-{{ .Revision }}
+          keys:
+            - gradle-v3-{{ checksum "build.gradle.kts" }}-{{ checksum "settings.gradle.kts" }}-{{ checksum "app/build.gradle.kts" }}
+            - gradle-v3-{{ checksum "build.gradle.kts" }}-{{ checksum "settings.gradle.kts" }}
+            - gradle-v3-
 
+      # Make gradlew executable
       - run:
-          name: Make Gradle Wrapper Executable
+          name: Make gradlew executable
           command: chmod +x ./gradlew
 
       - run:
           name: Download Dependencies
-          command: ./gradlew androidDependencies
+          command: |
+            ./gradlew dependencies --stacktrace
 
       - save_cache:
-          key: android-cache-{{ epoch }}
           paths:
             - ~/.gradle/caches
             - ~/.gradle/wrapper
+            - ~/.android/build-cache
+          key: gradle-v3-{{ checksum "build.gradle.kts" }}-{{ checksum "settings.gradle.kts" }}-{{ checksum "app/build.gradle.kts" }}
+
+      # Clean before build
+      - run:
+          name: Clean Project
+          command: ./gradlew clean --stacktrace
 
       - run:
-          name: Run Build
-          command: ./gradlew build
-
-      - store_artifacts:
-          path: app/build/reports
-          destination: reports
+          name: Build Debug
+          command: |
+            ./gradlew :app:assembleDebug \
+              --stacktrace \
+              --no-daemon
 
       - run:
-          name: Run Tests
-          command: ./gradlew lint test
+          name: Run Unit Tests
+          command: |
+            ./gradlew test \
+              --stacktrace \
+              --no-daemon
 
+      # Store test results dan artifacts
       - store_test_results:
           path: app/build/test-results
 
       - store_artifacts:
           path: app/build/outputs/apk/debug/
-          destination: artifact-file
+          destination: debug-apk
+
+      - store_artifacts:
+          path: app/build/reports/
+          destination: test-reports
 
 workflows:
   build_and_test:
     jobs:
+      # Coba docker executor terlebih dahulu
       - build

@@ -8,13 +8,11 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
 }
 
-fun getApi(propertyKey: String): String {
-    val properties = Properties()
-    val localProperties = rootProject.file("local.properties")
-    if (localProperties.exists()) {
-        properties.load(localProperties.inputStream())
-    }
-    return properties.getProperty(propertyKey, "")
+fun getLocalProp(key: String): String? {
+    val p = Properties()
+    val f = rootProject.file("local.properties")
+    if (f.exists()) p.load(f.inputStream())
+    return p.getProperty(key) ?: System.getenv(key)
 }
 
 android {
@@ -27,8 +25,12 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
 
-        buildConfigField("String", "BASE_URL", getApi("API_BASE_URL_TMDB"))
-        buildConfigField("String", "API_KEY", getApi("TMDB_API_KEY"))
+
+        val baseUrl = getLocalProp("API_BASE_URL_TMDB") ?: throw GradleException("TMDB_BASE_URL missing")
+        buildConfigField("String", "BASE_URL", baseUrl)
+
+        val apiKey = getLocalProp("TMDB_API_KEY") ?: throw GradleException("TMDB_API_KEY missing")
+        buildConfigField("String", "API_KEY", apiKey)
     }
 
     buildTypes {
