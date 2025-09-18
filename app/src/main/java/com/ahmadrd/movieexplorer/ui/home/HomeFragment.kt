@@ -183,4 +183,14 @@ class HomeFragment : Fragment() {
         ).show()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        with(binding) {
+            rvPopularMovies.adapter = null
+            rvTrendingMovies.adapter = null
+            rvGenresMovies.adapter = null
+        }
+        _binding = null
+    }
+
 }

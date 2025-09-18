@@ -6,9 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
-    <!-- Fixed Header Section -->
-
-    <!-- Fixed Search Section -->
+    <!-- Header Section -->
     <LinearLayout
         android:id="@+id/header_section"
         android:layout_width="match_parent"
@@ -43,6 +41,8 @@
 
     </LinearLayout>
 
+
+    <!-- Search Section -->
     <LinearLayout
         android:id="@+id/search_section"
         android:layout_width="match_parent"
