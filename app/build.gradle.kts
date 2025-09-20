@@ -30,6 +30,15 @@ android {
                 "proguard-rules.pro"
             )
         }
+
+        debug {
+            isDebuggable = false // For checking bug, error after turn on Obfuscation
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -69,5 +78,6 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
-    debugImplementation(libs.leakcanary.android)
+//    debugImplementation(libs.leakcanary.android)
+    releaseImplementation(libs.leakcanary.android)
 }

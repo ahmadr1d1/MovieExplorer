@@ -19,6 +19,10 @@ android {
             isMinifyEnabled = false
             proguardFiles("proguard-rules.pro")
         }
+
+        debug {
+            isDebuggable = false // For checking bug, error after turn on Obfuscation
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
